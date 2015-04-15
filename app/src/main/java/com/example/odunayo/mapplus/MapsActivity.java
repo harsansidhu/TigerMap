@@ -2,6 +2,7 @@ package com.example.odunayo.mapplus;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -10,6 +11,10 @@ import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.*;
@@ -24,7 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends ActionBarActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private LocationManager locationManager;  // location manager
@@ -91,9 +96,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationManager.requestLocationUpdates(provider, 20000, 0, locationListener);
 
             if (location == null) {
-                Toast.makeText(getApplicationContext(), "fuck", Toast.LENGTH_LONG).show();
+               // Toast.makeText(getApplicationContext(), "fuck", Toast.LENGTH_LONG).show();
                // locationListener.onLocationChanged(location);
             }
+
+        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+
+            @Override
+            public void onMapLongClick(LatLng point) {
+                mMap.addMarker(new MarkerOptions()
+                        .position(point)
+                        .title("New position")
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+            }
+        });
 
 
     }
@@ -161,6 +178,47 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // show location
         mMap.setMyLocationEnabled(true);
 
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_activity_actions, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+
+   /* @Override
+    public void onMapLongClick(LatLng point) {
+        mMap.addMarker(new MarkerOptions()
+                .position(point)
+                .title("You are here")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+    }*/
+
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item)
+    {
+        int id = item.getItemId();
+
+        if (id == R.id.new_event)
+        {
+            Intent intent = new Intent(this, NewEventPage.class);
+            startActivity(intent);
+        }
+
+        if (id == R.id.current_event)
+        {
+            Intent intent = new Intent(this, CurrentEventPage.class);
+            startActivity(intent);
+            overridePendingTransition( R.layout.slide_in_up, R.layout.slide_out_down);
+        }
+
+        return true;
     }
 
     /**

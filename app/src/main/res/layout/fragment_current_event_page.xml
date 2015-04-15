@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+See this page for more XML attribute options
+https://developers.google.com/maps/documentation/android/map#using_xml_attributes
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   xmlns:map="http://schemas.android.com/apk/res-auto"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   
+   map:mapType="normal" >
+
+   <fragment
+       android:id="@+id/map"
+       android:name="com.google.android.gms.maps.SupportMapFragment"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent" />
+
+ <!-- <Button
+       android:id="@+id/congregation_time"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:text="Estimated congregation time: N/A"
+       android:clickable="false"
+       android:layout_gravity="bottom|center"
+       android:textAppearance="?android:attr/textAppearanceLarge" /> -->
+
+</FrameLayout>

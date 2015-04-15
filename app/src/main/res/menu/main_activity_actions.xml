@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/new_event"
+        android:icon="@drawable/ic_add"
+        android:orderInCategory="3"
+        app:showAsAction="always"
+        android:title="New Event"/>
+    <item
+        android:id="@+id/friends"
+        android:orderInCategory="4"
+        app:showAsAction="ifRoom"
+        android:title="Friends"/>
+    <item
+        android:id="@+id/settings"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:title="Settings"/>
+    <item
+        android:id="@+id/current_event"
+        android:icon="@drawable/ic_menu_myplaces"
+        android:orderInCategory="2"
+        app:showAsAction="always"
+        android:title="Current Event"/>
+
+</menu>
