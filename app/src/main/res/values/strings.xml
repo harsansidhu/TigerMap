@@ -1,7 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">TigerMapsUI</string>
 
-    <string name="app_name">MapPlus</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_direction">DirectionActivity</string>
+    <string name="title_activity_display_direction">DisplayDirectionActivity</string>
+    <string name="title_activity_find">FindActivity</string>
 
+    <string-array name="find_array">
+        <item>Select</item>
+        <item>Food</item>
+        <item>Fun</item>
+        <item>C</item>
+        <item>D</item>
+    </string-array>
+    <string name="title_activity_find_direction">FindDirectionActivity</string>
 </resources>

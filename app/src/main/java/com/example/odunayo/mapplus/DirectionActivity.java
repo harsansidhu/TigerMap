@@ -32,6 +32,30 @@ public class DirectionActivity extends ActionBarActivity {
         Intent intent = new Intent(this, DisplayDirectionActivity.class);
         EditText editText = (EditText) findViewById(R.id.fromdest);
         String frommessage = editText.getText().toString();
+
+        // create class object
+        // source for most of code below:
+        // http://www.androidhive.info/2012/07/android-gps-location-manager-tutorial/
+        GPSTracker gps = new GPSTracker(DirectionActivity.this);
+
+        // check if GPS enabled
+        if(gps.canGetLocation()) {
+            if (frommessage.equalsIgnoreCase("")) {
+
+                double latitude = gps.getLatitude();
+                double longitude = gps.getLongitude();
+
+                // \n is for new line
+                Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+                frommessage = "Lat: " + latitude + "\nLong: " + longitude;
+            }
+        }else{
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
+        }
+
         intent.putExtra(EXTRA_MESSAGE_FROM, frommessage);
 
         Toast.makeText(getApplicationContext(), "From =" + frommessage, Toast.LENGTH_SHORT).show();
