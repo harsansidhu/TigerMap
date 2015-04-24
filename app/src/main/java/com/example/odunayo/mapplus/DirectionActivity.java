@@ -112,7 +112,7 @@ public class DirectionActivity extends ActionBarActivity {
 
                 // \n is for new line
                 Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-                frommessage = "Lat: " + latitude + "\nLong: " + longitude;
+                frommessage = "(" + latitude + "," + longitude + ")";
             }
         }else{
             // can't get location
@@ -127,11 +127,11 @@ public class DirectionActivity extends ActionBarActivity {
 
 
         EditText editTextto = (EditText) findViewById(R.id.todest);
-        String tomessage = editTextto.getText().toString();
+        String tomessage = editTextto.getText().toString().replace(";","");
 
         for(int i = 0; i < added.length; i++) {
             if(added[i].getVisibility() == View.VISIBLE) {
-                tomessage = tomessage.concat(", " + added[i].getText().toString());
+                tomessage = tomessage.concat(";" + added[i].getText().toString().replace(";",""));
             }
         }
 
