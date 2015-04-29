@@ -6,7 +6,40 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.odunayo.mapplus.FindActivity$PlaceholderFragment">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <TextView android:text="Find" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/findtext"
+        android:layout_centerHorizontal="true"
+        android:textSize="40dp" />
+
+    <Spinner
+        android:id="@+id/Dropdown"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown" />
+
+   <TextView
+       android:id="@+id/neartext"
+       android:layout_width="wrap_content"
+       android:text="Near"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:textSize="20dp" />
+
+    <EditText
+        android:id="@+id/neardest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:id="@+id/FindButton"
+        android:text="Find"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" />
+
 
 </RelativeLayout>

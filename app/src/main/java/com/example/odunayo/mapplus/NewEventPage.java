@@ -323,6 +323,11 @@ public class NewEventPage extends FragmentActivity {
         }
     }
 
+    public void shit()
+    {
+
+    }
+
     private static final String PLACES_AUTOCOMPLETE_API = "https://maps.googleapis.com/maps/api/place/autocomplete/json?";
 
     private ArrayList<String> autocomplete(String input) {
