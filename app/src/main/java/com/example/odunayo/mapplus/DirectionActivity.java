@@ -16,6 +16,8 @@ public class DirectionActivity extends ActionBarActivity {
     public final static String EXTRA_MESSAGE_FROM = "com.example.peter.tigermapsui.MESSAGEFROM";
     public final static String EXTRA_MESSAGE_TO = "com.example.peter.tigermapsui.MESSAGETO";
 
+    public static final String PREFS_NAME = "MyPrefsFile";
+
     private EditText[] added = new EditText[5];
     private int index = 0;
     private LinearLayout layout;

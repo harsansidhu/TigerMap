@@ -17,6 +17,8 @@ public class FindActivity extends ActionBarActivity implements AdapterView.OnIte
     public final static String EXTRA_MESSAGE_FROM = "com.example.peter.tigermapsui.MESSAGEFIND";
     public final static String EXTRA_MESSAGE_TO = "com.example.peter.tigermapsui.MESSAGETOF";
 
+    public static final String PREFS_NAME = "MyPrefsFile";
+
     private String value;
 
     @Override

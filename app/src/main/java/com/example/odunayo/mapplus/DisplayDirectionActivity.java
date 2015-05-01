@@ -1,6 +1,7 @@
 package com.example.peter.tigermapsui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 
 
 public class DisplayDirectionActivity extends ActionBarActivity {
+    public static final String PREFS_NAME = "MyPrefsFile";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +40,38 @@ public class DisplayDirectionActivity extends ActionBarActivity {
         String to = "To: ";
         String tomess = to.concat(tomessage);
 
+        //grab settings to concatenate settings;0;0;0;
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        boolean wheel = settings.getBoolean("wheelMode", false);
+        boolean grass = settings.getBoolean("grassMode", false);
+        boolean buses = settings.getBoolean("busMode", false);
+
+        boolean printers = settings.getBoolean("printersMode", false);
+        boolean dining = settings.getBoolean("diningMode", false);
+        String finloc = settings.getString("findlocMode", "");
+        String wspeed = settings.getString("walkspeedMode", "");
+
+        String sets = "settings;";
+        if(wheel) sets.concat("1;");
+        else sets.concat("0;");
+        if(grass) sets.concat("1;");
+        else sets.concat("0;");
+        if(buses) sets.concat("1;");
+        else sets.concat("0;");
+
+        if(finloc.isEmpty()) sets.concat("3;");
+        else sets.concat(finloc);
+
+        if(printers) sets.concat("1;");
+        else sets.concat("0;");
+        if(dining) sets.concat("1;");
+        else sets.concat("0;");
+
+        if(wspeed.isEmpty()) sets.concat("3.5;");
+        else sets.concat(wspeed);
         //Toast.makeText(getApplicationContext(),"To =" + tomessage, Toast.LENGTH_SHORT).show();
 
+        tomess.concat(sets);
 
         // Create the text view
         TextView textViewto = (TextView) findViewById(R.id.to);
