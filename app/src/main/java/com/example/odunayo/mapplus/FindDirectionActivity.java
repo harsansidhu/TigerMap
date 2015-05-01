@@ -57,11 +57,11 @@ public class FindDirectionActivity extends ActionBarActivity {
         if(buses) sets = sets.concat("1;");
         else sets = sets.concat("0;");
 
-        if(finloc.isEmpty()) sets = sets.concat("3;");
-        else sets = sets.concat(finloc + ";");
-
         if(wspeed.isEmpty()) sets = sets.concat("3.5;");
         else sets = sets.concat(wspeed + ";");
+
+        if(finloc.isEmpty()) sets = sets.concat("3;");
+        else sets = sets.concat(finloc + ";");
 
         if(printers) sets = sets.concat("1;");
         else sets = sets.concat("0;");
