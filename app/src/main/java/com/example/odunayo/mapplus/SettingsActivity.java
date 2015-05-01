@@ -11,18 +11,19 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class SettingsActivity extends ActionBarActivity {
     public static final String PREFS_NAME = "MyPrefsFile";
+    private SharedPreferences settings;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
         //grab preferences
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        boolean stairs = settings.getBoolean("stairsMode", false);
+        settings = getSharedPreferences(PREFS_NAME, 0);
         boolean wheel = settings.getBoolean("wheelMode", false);
         boolean grass = settings.getBoolean("grassMode", false);
         boolean buses = settings.getBoolean("busMode", false);
@@ -53,45 +54,52 @@ public class SettingsActivity extends ActionBarActivity {
         wheelchair.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                //settings = getSharedPreferences(PREFS_NAME, 0);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putBoolean("wheelMode", isChecked);
+                editor.commit();
+
+                Toast.makeText(getApplicationContext(), "Wheels", Toast.LENGTH_LONG).show();
             }
         });
 
         grasspath.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                //settings = getSharedPreferences(PREFS_NAME, 0);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putBoolean("grassMode", isChecked);
+                editor.commit();
             }
         });
 
         bususe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                //settings = getSharedPreferences(PREFS_NAME, 0);
                 SharedPreferences.Editor editor = settings.edit();
-                editor.putBoolean("busesMode", isChecked);
+                editor.putBoolean("busMode", isChecked);
+                editor.commit();
             }
         });
 
         onlineprint.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                //settings = getSharedPreferences(PREFS_NAME, 0);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putBoolean("printersMode", isChecked);
+                editor.commit();
             }
         });
 
         opendine.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                //settings = getSharedPreferences(PREFS_NAME, 0);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putBoolean("diningMode", isChecked);
+                editor.commit();
             }
         });
 
@@ -103,9 +111,10 @@ public class SettingsActivity extends ActionBarActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                //settings = getSharedPreferences(PREFS_NAME, 0);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString("findlocMode", s.toString());
+                editor.commit();
             }
 
             @Override
@@ -122,9 +131,10 @@ public class SettingsActivity extends ActionBarActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                //settings = getSharedPreferences(PREFS_NAME, 0);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString("walkspeedMode", s.toString());
+                editor.commit();
             }
 
             @Override

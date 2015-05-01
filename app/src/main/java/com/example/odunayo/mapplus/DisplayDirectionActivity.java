@@ -51,27 +51,27 @@ public class DisplayDirectionActivity extends ActionBarActivity {
         String finloc = settings.getString("findlocMode", "");
         String wspeed = settings.getString("walkspeedMode", "");
 
-        String sets = "settings;";
-        if(wheel) sets.concat("1;");
-        else sets.concat("0;");
-        if(grass) sets.concat("1;");
-        else sets.concat("0;");
-        if(buses) sets.concat("1;");
-        else sets.concat("0;");
+        String sets = ";settings;";
+        if(wheel) sets = sets.concat("1;");
+        else sets = sets.concat("0;");
+        if(grass) sets = sets.concat("1;");
+        else sets = sets.concat("0;");
+        if(buses) sets = sets.concat("1;");
+        else sets = sets.concat("0;");
 
-        if(finloc.isEmpty()) sets.concat("3;");
-        else sets.concat(finloc);
+        if(finloc.isEmpty()) sets = sets.concat("3;");
+        else sets = sets.concat(finloc + ";");
 
-        if(printers) sets.concat("1;");
-        else sets.concat("0;");
-        if(dining) sets.concat("1;");
-        else sets.concat("0;");
+        if(printers) sets = sets.concat("1;");
+        else sets = sets.concat("0;");
+        if(dining) sets = sets.concat("1;");
+        else sets = sets.concat("0;");
 
-        if(wspeed.isEmpty()) sets.concat("3.5;");
-        else sets.concat(wspeed);
+        if(wspeed.isEmpty()) sets = sets.concat("3.5;");
+        else sets = sets.concat(wspeed + ";");
         //Toast.makeText(getApplicationContext(),"To =" + tomessage, Toast.LENGTH_SHORT).show();
 
-        tomess.concat(sets);
+        tomess = tomess.concat(sets);
 
         // Create the text view
         TextView textViewto = (TextView) findViewById(R.id.to);
