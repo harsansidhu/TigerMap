@@ -60,13 +60,15 @@ public class FindDirectionActivity extends ActionBarActivity {
         if(finloc.isEmpty()) sets = sets.concat("3;");
         else sets = sets.concat(finloc + ";");
 
+        if(wspeed.isEmpty()) sets = sets.concat("3.5;");
+        else sets = sets.concat(wspeed + ";");
+
         if(printers) sets = sets.concat("1;");
         else sets = sets.concat("0;");
         if(dining) sets = sets.concat("1;");
         else sets = sets.concat("0;");
 
-        if(wspeed.isEmpty()) sets = sets.concat("3.5;");
-        else sets = sets.concat(wspeed + ";");
+
         //Toast.makeText(getApplicationContext(),"To =" + tomessage, Toast.LENGTH_SHORT).show();
 
         tomess = tomess.concat(sets);
