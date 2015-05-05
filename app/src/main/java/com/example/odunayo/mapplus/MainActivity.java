@@ -29,7 +29,7 @@ public class MainActivity extends ActionBarActivity {
         direction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Directions clicked", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(getApplicationContext(), "Directions clicked", Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(getApplication(), DirectionsActivity.class);
                 //EditText editText = (EditText) findViewById(R.id.edit_message);
@@ -40,7 +40,7 @@ public class MainActivity extends ActionBarActivity {
         find.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Find clicked", Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getApplicationContext(), "Find clicked", Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(getApplication(), FindActivity.class);
                 //EditText editText = (EditText) findViewById(R.id.edit_message);

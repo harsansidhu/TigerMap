@@ -15,13 +15,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -37,6 +40,15 @@ import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.client.util.Key;
 
+import android.annotation.SuppressLint;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
+import com.google.android.gms.maps.model.Marker;
+
+import static com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+
 public class CurrentEventPage extends FragmentActivity implements LocationListener {
     private GoogleMap mMap;                   // stores the actual map
     private LocationManager locationManager;  // location manager
@@ -49,6 +61,85 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
     private String start;
     private String dest;
 
+    private class Marker {
+
+        private LatLng location;
+        private String name;
+        private String Description;
+
+        public Marker(String name, String Description, LatLng location)
+        {
+            this.name = name;
+            this.location =  location;
+            this.Description = Description;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+
+        public LatLng getLatLng() {
+            return location;
+        }
+
+        public String getDescription() {
+            return Description;
+        }
+
+
+    }
+
+    private class Edge {
+
+        private List<LatLng> edgeList;
+
+        public Edge(List<LatLng> edgeList)
+        {
+            this.edgeList = edgeList;
+        }
+
+        public List<LatLng>  getEdges() {
+            return edgeList;
+        }
+
+
+    }
+
+
+
+    private class PopupAdapter implements GoogleMap.InfoWindowAdapter {
+        private View popup=null;
+        private LayoutInflater inflater=null;
+
+        PopupAdapter(LayoutInflater inflater) {
+            this.inflater=inflater;
+        }
+
+        @Override
+        public View getInfoWindow(com.google.android.gms.maps.model.Marker marker) {
+            return(null);
+        }
+
+        @SuppressLint("InflateParams")
+        @Override
+        public View getInfoContents(com.google.android.gms.maps.model.Marker marker) {
+            if (popup == null) {
+                popup=inflater.inflate(R.layout.popup, null);
+            }
+
+            TextView tv=(TextView)popup.findViewById(R.id.title);
+
+            tv.setText(marker.getTitle());
+            tv=(TextView)popup.findViewById(R.id.snippet);
+            tv.setText(marker.getSnippet());
+
+            return(popup);
+        }
+    }
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,12 +149,64 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
         // show location
         mMap.setMyLocationEnabled(true);
 
+     //   mMap.setInfoWindowAdapter(new PopupAdapter(getLayoutInflater()));
+
+        mMap.setInfoWindowAdapter(new InfoWindowAdapter() {
+
+            public View getInfoWindow(com.google.android.gms.maps.model.Marker arg0) {
+                View v = getLayoutInflater().inflate(R.layout.custominfo, null);
+                return v;
+            }
+
+            public View getInfoContents(com.google.android.gms.maps.model.Marker arg0) {
+
+                View v = getLayoutInflater().inflate(R.layout.custominfo, null);
+
+                return null;
+
+            }
+        });
+
+
+       // mMap.setOnInfoWindowClickListener((OnInfoWindowClickListener) this);
+      /*  mMap.setInfoWindowAdapter(new InfoWindowAdapter() {
+
+            View popup=null;
+            LayoutInflater inflater=null;
+            @Override
+            public View getInfoWindow(com.google.android.gms.maps.model.Marker marker) {
+
+                View v = getLayoutInflater().inflate(R.layout.popup, null);
+                return v;
+
+            }
+
+            @Override
+            public View getInfoContents(com.google.android.gms.maps.model.Marker marker) {
+
+                if (popup == null) {
+                    popup=inflater.inflate(R.layout.popup, null);
+                }
+
+                TextView tv=(TextView)popup.findViewById(R.id.title);
+
+                tv.setText(marker.getTitle());
+                tv=(TextView)popup.findViewById(R.id.snippet);
+                tv.setText(marker.getSnippet());
+
+                return(popup);
+
+
+            }
+        });*/
+
         // initialize locationManager
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         provider = locationManager.getBestProvider(criteria, true);
         locationManager.requestLocationUpdates(provider, 1000, 10, this);
         location = mMap.getMyLocation();
+
 
         // set camera to roughly the area of location
         location = mMap.getMyLocation();
@@ -82,38 +225,44 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
         Bundle extra = getIntent().getExtras();
         String origin = extra.getString("from");
         String destination = extra.getString("to");
+        String[] destinations = extra.getStringArray("Locations");
+        Boolean multiple = extra.getBoolean("multiple");
+        String myLocation = extra.getString("mylocation");
+        Boolean find = extra.getBoolean("findTrue");
+        String findString = extra.getString("find");
 
-     //   String origin = "witherspoon hall";
-      //  String destination = "east pyne";
-
-        // if user doesnt input a location then get latLng
-       /* if (origin.equals("")) {
-            StringBuilder s = new StringBuilder();
-            s.append(location.getLatitude());
-            s.append(",");
-            s.append(location.getLongitude());
-            origin = s.toString();
-        }*/
-
-      //  String send = "dir;" + origin + ";" + destination + ";";
-        //Toast.makeText(getApplicationContext(), send, Toast.LENGTH_LONG).show();
-
-        start = origin;
-        dest = destination;
+        if (findString != null)
+        Log.d("find ", findString);
+        Log.d("findTrue ", "what " + find);
 
 
+        String send = "";
+        if (!find) {
+            if (origin == "" || origin == "my location" || origin == "here" || origin == "BasedGod")
+                origin = myLocation;
 
+
+            start = origin;
+            dest = destination;
+             send = "dir;" + origin + ";" + destination + ";settings;0;1;0;2.5;3;1;0";
+             //send = "find;" + "0;" + "Frist";
+        }
+
+        else {
+            Log.d("fuck", "changed send");
+            send = findString;
+
+        }
         // draws in the directions poly lines
         ServerCom s = new ServerCom();
         String response = null;
         try {
-            response = s.sendToServer(this, origin, destination);
+            response = s.sendToServer(this, origin, destination, send);
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
 
         CharSequence g = "Error";
        // Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
@@ -122,163 +271,217 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
 
         else{
 
-     //   if((response != "Multiple possible matches for location") || (response
-       // != origin +"is not a valid location")) {
-
-            //    if (response == null)
-            //      Toast.makeText(getApplicationContext(),"is null", Toast.LENGTH_LONG).show();
-            //  if (response != null)
-            //     Toast.makeText(getApplicationContext(),response, Toast.LENGTH_LONG).show();
-
             //Parse String from server
+
             String delims = "[;]";
-
-            String[] tokens = response.split(delims);
-            //  Toast.makeText(getApplicationContext(), "length" + tokens.length, Toast.LENGTH_LONG).show();
-            //  Toast.makeText(getApplicationContext(), "markers" + tokens[0], Toast.LENGTH_LONG).show();
-            //  Toast.makeText(getApplicationContext(), "edges" + tokens[1], Toast.LENGTH_LONG).show();
-
-            String markers = tokens[0];
-            //    Toast.makeText(getApplicationContext(), markers + tokens[0], Toast.LENGTH_LONG).show();
             String delims2 = "[:{}]+";
-            String[] tokens2 = markers.split(delims2);
-            for (int i = 0; i < tokens2.length; i++) {
-                Log.d("String" + i, tokens2[i]);
-                // Toast.makeText(getApplicationContext(), tokens2[i], Toast.LENGTH_LONG).show();
-            }
 
-            String mLatLngs = tokens2[1];
             String delims3 = "[)]+,[(]+";
-            String[] tokens3 = mLatLngs.split(delims3);
-            for (int i = 0; i < tokens3.length; i++) {
-                Log.d("String2" + i, tokens3[i]);
-                //  Toast.makeText(getApplicationContext(), tokens3[i], Toast.LENGTH_LONG).show();
-
-            }
-
-            String first = tokens3[0];
-            Log.d("String first", first);
             String delimcom = ",";
             String delimparn = "[(]";
             String delimparn2 = "[)]";
-            String[] firstParse = first.split(delimcom);
 
-            String first1 = firstParse[0];
-            String[] first12 = first1.split(delimparn);
-            Log.d("first12", first12[1]);
+            //Split between Markers and Edges
+            String[] firstSplit = response.split(delims);
 
-            double latitude = Double.parseDouble(first12[1]);
-            double longitude = Double.parseDouble(firstParse[1]);
+            String markers = firstSplit[0];
+            String dfirst2 = ",\\(";
+           // String[] mTokens1 = markers.split(dfirst2);
 
-            //    Toast.makeText(getApplicationContext(), "lat" + latitude, Toast.LENGTH_LONG).show();
-            //   Toast.makeText(getApplicationContext(), "lon" + longitude, Toast.LENGTH_LONG).show();
-
-            LatLng firstPoint = new LatLng(latitude, longitude);
-
-            String second = tokens3[1];
-            String[] second2 = second.split(delimcom);
-            String firstsec = second2[0];
-            String[] secsec = second2[1].split(delimparn2);
-            double latitude2 = Double.parseDouble(firstsec);
-            double longitude2 = Double.parseDouble(secsec[0]);
-
-            //   Toast.makeText(getApplicationContext(), "lat2" + latitude2, Toast.LENGTH_LONG).show();
-            //   Toast.makeText(getApplicationContext(), "lon2" + longitude2, Toast.LENGTH_LONG).show();
-            LatLng secondPoint = new LatLng(latitude2, longitude2);
-
-            Log.d("String second", second);
+            String delimit4 = "((([,][(]))|[{}])";
+            String delimit5 = "\\[";
+            String delimit6 = "[,]";
+            String[] mTokens1 = markers.split(delimit4);
 
 
-            List<LatLng> mList = new ArrayList<LatLng>();
-            mList.add(firstPoint);
-            mList.add(secondPoint);
 
-            //   Toast.makeText(getApplicationContext(), "first " + mList.get(0), Toast.LENGTH_LONG).show();
-            //    Toast.makeText(getApplicationContext(), "second " + mList.get(1), Toast.LENGTH_LONG).show();
+            List<Marker> mList = new ArrayList<Marker>();
+            for(int i = 1; i < mTokens1.length; i++) {
+
+                String mStr = mTokens1[i];
+                Log.d("mStr " + i, mStr);
+                String[] mTokens2 = mStr.split(delimit5);
 
 
-            String edges = tokens[1];
+                for(int j = 0; j < mTokens2.length; j++) {
+                    Log.d("String " + j, mTokens2[j]);
+
+                }
+
+                String loc = mTokens2[0];
+                String descrip = mTokens2[1];
+
+                loc = loc.replace("(", "");
+                loc = loc.replace(")", "");
+                Log.d("loc " , loc);
+                String[] splitloc = loc.split(delimit6);
+                double mLat = Double.parseDouble(splitloc[0]);
+                double mLon = Double.parseDouble(splitloc[1]);
+
+                for(int j = 0; j < splitloc.length; j++) {
+                    Log.d("String2 " + j, splitloc[j]);
+                }
+
+
+                Log.d("Descrip", descrip);
+                descrip = descrip.replace("]", "");
+                String[] descrip2 = descrip.split(delimcom);
+
+                String name = descrip2[0];
+                String description = "";
+                if (descrip2.length > 1)
+                    description = descrip2[1];
+
+                name = name.replace("\"", "");
+                description = description.replace("\"", "");
+
+                for(int j = 0; j < descrip2.length; j++) {
+                    Log.d("String3 " + j, descrip2[j]);
+                }
+
+                LatLng location = new LatLng(mLat, mLon);
+                Marker m = new Marker(name, description, location);
+                mList.add(m);
+
+
+              /*  Toast.makeText(getApplicationContext(), "Marker: Name " + m.getName() +
+                        " Marker: description " + m.getDescription() +
+                        " Marker: LatLng " + m.getLatLng(),
+                        Toast.LENGTH_LONG).show();*/
+
+                Log.d("Marker: Name ", m.getName());
+                Log.d("Marker: description ", m.getDescription());
+                Log.d("Marker: LatLng ", m.getLatLng().toString());
+
+            }
+
+            String edges = firstSplit[1];
             String edgedelim = "[:{}]+";
             String[] tokens4 = edges.split(edgedelim);
+
+            //LOOP FOR TESTING PURPOSES
             for (int i = 0; i < tokens4.length; i++) {
-                Log.d("String" + i, tokens4[i]);
-                //   Toast.makeText(getApplicationContext(), tokens4[i], Toast.LENGTH_LONG).show();
+                Log.d("Edges1 " + i, tokens4[i]);
             }
 
-            String eLatLngs = tokens4[1];
-            String[] tokens5 = eLatLngs.split(delims3);
-            for (int i = 0; i < tokens5.length; i++) {
-                Log.d("String" + i, tokens5[i]);
-                //  Toast.makeText(getApplicationContext(), tokens5[i], Toast.LENGTH_LONG).show();
-            }
+            String xSplit = "X";
+            tokens4[1] = tokens4[1].replace(")),", "X");
+            Log.d("Edge List Delim " , tokens4[1]);
+
 
             String d = "[(())]+";
-
-            String[] x = tokens5[0].split(d);
-         //   for (String g : x) {
-                // if(!g.isEmpty())
-                //  Toast.makeText(getApplicationContext(), "Token " + g, Toast.LENGTH_LONG).show();
-                //   i++;
-           // }
+            List<Edge> edgeList = new ArrayList<Edge>();
             List<LatLng> eList = new ArrayList<LatLng>();
-            for (String str : tokens5) {
-                String[] p = str.split(d);
-                // Toast.makeText(getApplicationContext(), "Str " + str, Toast.LENGTH_LONG).show();
-                for (String str2 : p) {
-                    if (!str2.isEmpty()) {
-                        String[] q = str2.split(delimcom);
-                        double eLat = Double.parseDouble(q[0]);
-                        double eLon = Double.parseDouble(q[1]);
-                        //  Toast.makeText(getApplicationContext(), "Str3 " + eLat, Toast.LENGTH_LONG).show();
-                        // Toast.makeText(getApplicationContext(), "Str3 " + eLon, Toast.LENGTH_LONG).show();
-                        LatLng eLatLng = new LatLng(eLat, eLon);
-                        eList.add(eLatLng);
-                        //Toast.makeText(getApplicationContext(), "LatLng " + eLatLng, Toast.LENGTH_LONG).show();
 
+            if(tokens4.length > 1) {
+
+                String[] splitLines = tokens4[1].split(xSplit);
+
+                //LOOP FOR TESTING PURPOSES
+                for (int i = 0; i < splitLines.length; i++) {
+                    Log.d("Xsplit " + i, splitLines[i]);
+                }
+
+                String zSplit = "Z";
+                for (String eSplit : splitLines){
+                    eSplit = eSplit.replace("(", "");
+                    eSplit = eSplit.replace("))", "");
+                    eSplit = eSplit.replace("),", "Z");
+                    Log.d("Xsplit2 ", eSplit);
+                    List<LatLng> LatList = new ArrayList<LatLng>();
+                    String[] p = eSplit.split(zSplit);
+                    for (String str : p) {
+
+                        if (!str.isEmpty()) {
+                            Log.d("Str ", str);
+                            String[] q = str.split(delimcom);
+                            double eLat = Double.parseDouble(q[0]);
+                            double eLon = Double.parseDouble(q[1]);
+                            LatLng eLatLng = new LatLng(eLat, eLon);
+                         //   Log.d("LatList ", "Lat :" + eLatLng);
+                            LatList.add(eLatLng);
+
+
+                        }
 
                     }
 
+                    Edge e =  new Edge(LatList);
+                    edgeList.add(e);
+
+                }
+
+
+
+            }
+
+            for (int i = 0; i < edgeList.size(); i++)
+            {
+                Edge e = edgeList.get(i);
+                List<LatLng> edge = e.getEdges();
+                for(LatLng lat : edge){
+                    Log.d("Edge ", + i + " " + lat);
                 }
 
             }
 
-            addLines(mList, eList);
+            addLines(mList, edgeList);
 
          }
+
     }
 
     /**
      * Adds a list of markers to the map.
      */
-    public void addLines(List<LatLng> mLatLngs, List<LatLng> eLatLngs) {
+    public void addLines(List<Marker> mLatLngs, List<Edge> edgeList) {
         PolylineOptions options = new PolylineOptions();
 
         // light blue color and noticeable width
         options.color(Color.parseColor("#DB3301"));
         options.width(12);
 
-        LatLng starte = mLatLngs.get(0);
-        LatLng deste = mLatLngs.get(1);
+        //Add Markers
+        int i = 0;
+        float color = BitmapDescriptorFactory.HUE_RED;
+        for (Marker m : mLatLngs) {
 
-        mMap.addMarker(new MarkerOptions()
-                .title("Start")
-                .snippet(start)
-                .position(starte));
-        mMap.addMarker(new MarkerOptions()
-                .title("Destination")
-                .snippet(dest)
-                .position(deste));
+            switch(i){
+                case 1: color = BitmapDescriptorFactory.HUE_BLUE;
+                    break;
+                case 2: color = BitmapDescriptorFactory.HUE_CYAN;
+                    break;
+                case 3: color = BitmapDescriptorFactory.HUE_ROSE;
+                    break;
+                case 4: color = BitmapDescriptorFactory.HUE_YELLOW;
+                    break;
+                case 5: color = BitmapDescriptorFactory.HUE_MAGENTA;
+                    break;
+                case 6: color = BitmapDescriptorFactory.HUE_GREEN;
+                    break;
 
-     //    for (LatLng latLng : mLatLngs) {
-       //      options.add(latLng);
-        // }
+            }
 
-        //Add route path
-        for (LatLng latLng : eLatLngs) {
-            options.add(latLng);
+            mMap.addMarker(new MarkerOptions()
+                    .title(m.getName())
+                    .snippet(m.getDescription())
+                    .icon(BitmapDescriptorFactory.defaultMarker(color))
+                    .position(m.getLatLng()));
+         i++;
         }
 
-        mMap.addPolyline(options);
+
+        //Add route path
+        for(Edge e : edgeList){
+            PolylineOptions polyLines = new PolylineOptions();
+            polyLines.color(Color.parseColor("#DB3301"));
+            polyLines.width(12);
+            polyLines.addAll(e.getEdges());
+            mMap.addPolyline(polyLines);
+
+        }
+
+
     }
 
     public void onPause() {
@@ -442,11 +645,22 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
 
     @Override
     public void onLocationChanged(Location location) {
+
+        GPSTracker gps = new GPSTracker(this);
+
         // Getting latitude of the current location
         double latitude = location.getLatitude();
 
         // Getting longitude of the current location
         double longitude = location.getLongitude();
+
+        if(gps.canGetLocation()) {
+
+                 latitude = gps.getLatitude();
+                 longitude = gps.getLongitude();
+            Log.d("Changed loc", "Changed loc");
+        }
+
 
         // Creating a LatLng object for the current location
         LatLng latLng = new LatLng(latitude, longitude);
@@ -456,8 +670,39 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
 
         // Zoom in the Google Map
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        Log.d("Changed loc2", "Changed loc2");
 
         // stop
         locationManager.removeUpdates(this);
     }
+
+    /*List<LatLng> eList = new ArrayList<LatLng>();
+            if(tokens4.length > 1) {
+
+                String eLatLngs = tokens4[1];
+                String[] tokens5 = eLatLngs.split(delims3);
+                //LOOP FOR TESTING PURPOSES
+                for (int i = 0; i < tokens5.length; i++) {
+                    Log.d("Edges2 " + i, tokens5[i]);
+                }
+
+                String d = "[(())]+";
+
+                for (String str : tokens5) {
+                    String[] p = str.split(d);
+                    for (String str2 : p) {
+                        if (!str2.isEmpty()) {
+                            String[] q = str2.split(delimcom);
+                            double eLat = Double.parseDouble(q[0]);
+                            double eLon = Double.parseDouble(q[1]);
+                            LatLng eLatLng = new LatLng(eLat, eLon);
+                            eList.add(eLatLng);
+
+
+                        }
+
+                    }
+
+                }
+            }*/
 }

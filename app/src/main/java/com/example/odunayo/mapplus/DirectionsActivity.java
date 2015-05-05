@@ -27,6 +27,7 @@ public class DirectionsActivity extends ActionBarActivity {
     private Button removeEditText;
     private String LatLng;
     private String[] destArray;
+    private Boolean mult =  false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,14 +112,17 @@ public class DirectionsActivity extends ActionBarActivity {
 
         // check if GPS enabled
         if(gps.canGetLocation()) {
-            if (frommessage.equalsIgnoreCase("")) {
+            if (frommessage.equalsIgnoreCase("") || frommessage.equalsIgnoreCase("my location") || frommessage.equalsIgnoreCase("BasedGod")) {
 
                 double latitude = gps.getLatitude();
                 double longitude = gps.getLongitude();
 
                 //Create String for LatLng
-                LatLng = "( " + latitude + " ," + longitude +")";
-                Toast.makeText(getApplicationContext(), "Location" + LatLng, Toast.LENGTH_LONG).show();
+                LatLng = "(" + latitude + " ," + longitude +")";
+             //   Toast.makeText(getApplicationContext(), "Location" + LatLng, Toast.LENGTH_LONG).show();
+                intent.putExtra("mylocation", LatLng);
+
+
 
 
                 // \n is for new line
@@ -129,6 +133,7 @@ public class DirectionsActivity extends ActionBarActivity {
             // can't get location
             // GPS or Network is not enabled
             // Ask user to enable GPS/network in settings
+            Toast.makeText(getApplicationContext(), "Cant get location", Toast.LENGTH_LONG).show();
             gps.showSettingsAlert();
         }
 
@@ -136,7 +141,7 @@ public class DirectionsActivity extends ActionBarActivity {
 
         intent.putExtra(EXTRA_MESSAGE_FROM, frommessage);
 
-        Toast.makeText(getApplicationContext(), "From =" + frommessage, Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(getApplicationContext(), "From =" + frommessage, Toast.LENGTH_SHORT).show();
 
 
         EditText editTextto = (EditText) findViewById(R.id.todest);
@@ -147,15 +152,22 @@ public class DirectionsActivity extends ActionBarActivity {
             if(added[i].getVisibility() == View.VISIBLE) {
                 tomessage = tomessage.concat(";" + added[i].getText().toString().replace(";",""));
                 destArray[i] = added[i].getText().toString();
-                Toast.makeText(getApplicationContext(),"Dest: " + i +" " + destArray[i] , Toast.LENGTH_SHORT).show();
+                mult = true;
+
+              //  Toast.makeText(getApplicationContext(),"Dest: " + i +" " + destArray[i] , Toast.LENGTH_SHORT).show();
             }
 
 
-        }
 
+        }
+       // Toast.makeText(getApplicationContext(),"Multi? " + mult , Toast.LENGTH_SHORT).show();
+        intent.putExtra("from", frommessage);
+        intent.putExtra("to", tomessage);
+        intent.putExtra("multiple", mult);
+        intent.putExtra("Locations", destArray);
         intent.putExtra(EXTRA_MESSAGE_TO, tomessage);
 
-        Toast.makeText(getApplicationContext(),"To =" + tomessage, Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(getApplicationContext(),"To =" + tomessage, Toast.LENGTH_SHORT).show();
 
         startActivity(intent);
     }

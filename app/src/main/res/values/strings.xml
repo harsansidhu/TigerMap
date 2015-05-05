@@ -7,4 +7,14 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <string-array name="find_array">
+        <item>Food</item>
+        <item>Public Access Buildings N/A</item>
+        <item>Bathrooms(none)</item>
+        <item>Computer Clusters</item>
+        <item>Printers</item>
+        <item>Scanners</item>
+        <item>Libraries</item>
+    </string-array>
+
 </resources>

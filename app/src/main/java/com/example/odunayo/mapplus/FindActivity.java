@@ -1,38 +1,109 @@
 package com.example.odunayo.mapplus;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 
-public class FindActivity extends ActionBarActivity {
+public class FindActivity extends ActionBarActivity implements AdapterView.OnItemSelectedListener {
+    public final static String EXTRA_MESSAGE_FROM = "com.example.peter.tigermapsui.MESSAGEFIND";
+    public final static String EXTRA_MESSAGE_TO = "com.example.peter.tigermapsui.MESSAGETOF";
+
+    private String value;
+    private Boolean find = true;
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_find);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
+        setContentView(R.layout.activity_find);
 
-        Spinner dropdown = (Spinner)findViewById(R.id.dropdown);
-        String[] items = new String[]{"Food", "Computer Clusters"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items);
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.find_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        dropdown.setAdapter(adapter);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(this);
+
+        Log.d("Find ID ", String.valueOf(spinner.getSelectedItemId()));
     }
 
+    public void fromsend(View view) {
+        Intent intent = new Intent(this, CurrentEventPage.class);
+        String frommessage = value;
+        intent.putExtra(EXTRA_MESSAGE_FROM, frommessage);
+
+      //  Toast.makeText(getApplicationContext(), "From =" + frommessage, Toast.LENGTH_SHORT).show();
+
+
+        EditText editTextnear = (EditText) findViewById(R.id.neardest);
+        String tomessage = editTextnear.getText().toString();
+
+
+
+
+        // http://www.androidhive.info/2012/07/android-gps-location-manager-tutorial/
+        GPSTracker gps = new GPSTracker(FindActivity.this);
+
+        // check if GPS enabled
+        if(gps.canGetLocation()) {
+            if (tomessage.equalsIgnoreCase("")) {
+
+                double latitude = gps.getLatitude();
+                double longitude = gps.getLongitude();
+
+                // \n is for new line
+              //  Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+              //  tomessage = "Lat: " + latitude + "\nLong: " + longitude;
+                tomessage = "(" + latitude + " ," + longitude +")";
+            }
+        }else{
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
+        }
+
+        String formatted = "find;" + position + ";" + tomessage + ";settings;0;1;0;2.5;3;1;0";
+        intent.putExtra(EXTRA_MESSAGE_TO, tomessage);
+        intent.putExtra("findTrue", find);
+        intent.putExtra("find", formatted);
+       // Toast.makeText(getApplicationContext(), formatted, Toast.LENGTH_LONG).show();
+
+
+     //   Toast.makeText(getApplicationContext(),"To =" + tomessage, Toast.LENGTH_SHORT).show();
+
+
+        startActivity(intent);
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+        // An item was selected. You can retrieve the selected item using
+        value = parent.getItemAtPosition(pos).toString();
+        position = pos;
+
+       // Toast.makeText(getApplicationContext(), value, Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(getApplicationContext(), "Position " + position, Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        value = "";
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -54,21 +125,5 @@ public class FindActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_find, container, false);
-            return rootView;
-        }
     }
 }

@@ -32,6 +32,7 @@ public class ServerCom  {
     private Context context;
 
 
+
     public ServerCom(Context c, String origin, String destination){
         context = c;
         this.origin = origin;
@@ -42,29 +43,24 @@ public class ServerCom  {
 
 
     // Send a String to the server and return the response of that request
-    public String sendToServer(Context c, String origin, String destination) throws ExecutionException, InterruptedException {
+    public String sendToServer(Context c, String origin, String destination,String input) throws ExecutionException, InterruptedException {
         context = c;
 
+        sendToServer = input;
+        Log.d("Input to Server", sendToServer);
+
         // sendToServer = message;
-        SimpleHttpRequest request = new SimpleHttpRequest(origin, destination);
+        SimpleHttpRequest request = new SimpleHttpRequest(sendToServer);
         String s = request.execute().get();
 
 
         if (serverResponse == null)
-            Log.d("sWHAT THE FUCK", "WHAT THE FUCK");
+            Log.d("Server Response is Null", "Null");
 
-      //  Toast.makeText(context, "response" + s, Toast.LENGTH_LONG).show();
 
 
         return s;
     }
-
- /*   public void setResponse(String s)
-    {
-        serverResponse = s;
-        Toast.makeText(context, "fuck " + serverResponse, Toast.LENGTH_LONG).show();
-        Log.d("serverresponse", serverResponse);
-    }*/
 
     public String response()
     {
@@ -77,13 +73,15 @@ public class ServerCom  {
         HttpClient httpclient;
         HttpPost httppost;
         String responseString;
+        String send;
         private String origin;
         private String destination;
 
 
-        public SimpleHttpRequest(String origin,String destination) {
-            this.origin = origin;
-            this.destination = destination;
+        public SimpleHttpRequest(String send) {
+         //   this.origin = origin;
+          //  this.destination = destination;
+            this.send = send;
         }
 
         protected void onPreExecute() {
@@ -98,7 +96,9 @@ public class ServerCom  {
                 httppost = new HttpPost("http://grantstorey.com/TigerMapBackend/serverCom/serverSocket.php");
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
 
-                String send = "dir;" + origin + ";" + destination;
+              //  String send = "dir;" + origin + ";" + destination;
+               // String send = "find;" + "0;" + "Frist";
+                Log.d("Sent", send);
                 nameValuePairs.add(new BasicNameValuePair("action", send));
 
 
