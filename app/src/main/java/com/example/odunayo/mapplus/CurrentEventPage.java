@@ -14,6 +14,8 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -66,6 +68,7 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
         private LatLng location;
         private String name;
         private String Description;
+        private Spanned content;
 
         public Marker(String name, String Description, LatLng location)
         {
@@ -75,6 +78,8 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
         }
 
         public String getName() {
+            if (name.length() ==0)
+                return "This is your Current Location";
             return name;
         }
 
@@ -84,7 +89,19 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
         }
 
         public String getDescription() {
+
+
             return Description;
+        }
+
+        public void setSpanned(Spanned content){
+            this.content = content;
+
+        }
+
+        public Spanned getSpanned(){
+            return content;
+
         }
 
 
@@ -153,8 +170,67 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
 
         mMap.setInfoWindowAdapter(new InfoWindowAdapter() {
 
-            public View getInfoWindow(com.google.android.gms.maps.model.Marker arg0) {
+            public View getInfoWindow(com.google.android.gms.maps.model.Marker marker) {
                 View v = getLayoutInflater().inflate(R.layout.custominfo, null);
+                final String title = marker.getTitle();
+                final TextView titleUi = ((TextView) v.findViewById(R.id.title));
+                if (title != null) {
+                    titleUi.setText(title);
+                } else {
+                    titleUi.setText("You Are Here");
+                }
+
+                String html = "(?<=[.])(?=[<])";
+
+                //    for(int j = 0; j < descrip3.length; j++) {
+                //       Log.d("Html " + j, descrip3[j]);
+                //   }
+
+                //descrip3[1] = html string
+                //   Spanned spannedContent = Html.fromHtml(descrip3[1]);
+
+
+                final String snippet = marker.getSnippet();
+                String[] splitDescrip = snippet.split(html);
+
+                if(splitDescrip.length > 1)
+                {
+                    Log.d("SplitDescrip ",splitDescrip[0]);
+                    Log.d("SplitDescrip2 ",splitDescrip[1]);
+
+                }
+
+
+                final TextView snippetUi = ((TextView) v
+                        .findViewById(R.id.snippet));
+                if (snippet != null) {
+                    snippetUi.setText(splitDescrip[0]);
+                } else {
+                    snippetUi.setText("You Are Here");
+
+                }
+
+                final TextView htmlUi = ((TextView) v
+                        .findViewById(R.id.html));
+                if (splitDescrip.length > 1) {
+                    Spanned spannedContent = Html.fromHtml(splitDescrip[1]);
+                    htmlUi.setText(spannedContent, TextView.BufferType.SPANNABLE);
+
+                } else {
+                    htmlUi.setText("");
+                }
+
+
+
+           /*     final Spanned html = marker.getSpanned();
+                final TextView htmlUi = ((TextView) v
+                        .findViewById(R.id.html));
+                if (snippet != null) {
+                    snippetUi.setText(snippet);
+                    textView.setText(spannedContent, BufferType.SPANNABLE);
+                } else {
+                    snippetUi.setText("");
+                }*/
                 return v;
             }
 
@@ -168,37 +244,6 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
         });
 
 
-       // mMap.setOnInfoWindowClickListener((OnInfoWindowClickListener) this);
-      /*  mMap.setInfoWindowAdapter(new InfoWindowAdapter() {
-
-            View popup=null;
-            LayoutInflater inflater=null;
-            @Override
-            public View getInfoWindow(com.google.android.gms.maps.model.Marker marker) {
-
-                View v = getLayoutInflater().inflate(R.layout.popup, null);
-                return v;
-
-            }
-
-            @Override
-            public View getInfoContents(com.google.android.gms.maps.model.Marker marker) {
-
-                if (popup == null) {
-                    popup=inflater.inflate(R.layout.popup, null);
-                }
-
-                TextView tv=(TextView)popup.findViewById(R.id.title);
-
-                tv.setText(marker.getTitle());
-                tv=(TextView)popup.findViewById(R.id.snippet);
-                tv.setText(marker.getSnippet());
-
-                return(popup);
-
-
-            }
-        });*/
 
         // initialize locationManager
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -244,8 +289,7 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
 
             start = origin;
             dest = destination;
-             send = "dir;" + origin + ";" + destination + ";settings;0;1;0;2.5;3;1;0";
-             //send = "find;" + "0;" + "Frist";
+            send = "dir;" + origin + ";" + destination + ";settings;0;1;0;2.5;3;1;0";
         }
 
         else {
@@ -339,8 +383,20 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
                     Log.d("String3 " + j, descrip2[j]);
                 }
 
+                //Parse out html if it exists
+                String html = "(?<=[.])(?=[<])";
+              //  String[] descrip3 = description.split(html);
+
+            //    for(int j = 0; j < descrip3.length; j++) {
+             //       Log.d("Html " + j, descrip3[j]);
+             //   }
+
+                //descrip3[1] = html string
+             //   Spanned spannedContent = Html.fromHtml(descrip3[1]);
+
                 LatLng location = new LatLng(mLat, mLon);
                 Marker m = new Marker(name, description, location);
+               // m.setSpanned(spannedContent);
                 mList.add(m);
 
 
@@ -360,9 +416,9 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
             String[] tokens4 = edges.split(edgedelim);
 
             //LOOP FOR TESTING PURPOSES
-            for (int i = 0; i < tokens4.length; i++) {
-                Log.d("Edges1 " + i, tokens4[i]);
-            }
+            //for (int i = 0; i < tokens4.length; i++) {
+             //   Log.d("Edges1 " + i, tokens4[i]);
+           // }
 
             String xSplit = "X";
             tokens4[1] = tokens4[1].replace(")),", "X");
@@ -378,22 +434,22 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
                 String[] splitLines = tokens4[1].split(xSplit);
 
                 //LOOP FOR TESTING PURPOSES
-                for (int i = 0; i < splitLines.length; i++) {
-                    Log.d("Xsplit " + i, splitLines[i]);
-                }
+                //for (int i = 0; i < splitLines.length; i++) {
+                //    Log.d("Xsplit " + i, splitLines[i]);
+               // }
 
                 String zSplit = "Z";
                 for (String eSplit : splitLines){
                     eSplit = eSplit.replace("(", "");
                     eSplit = eSplit.replace("))", "");
                     eSplit = eSplit.replace("),", "Z");
-                    Log.d("Xsplit2 ", eSplit);
+                   // Log.d("Xsplit2 ", eSplit);
                     List<LatLng> LatList = new ArrayList<LatLng>();
                     String[] p = eSplit.split(zSplit);
                     for (String str : p) {
 
                         if (!str.isEmpty()) {
-                            Log.d("Str ", str);
+                           // Log.d("Str ", str);
                             String[] q = str.split(delimcom);
                             double eLat = Double.parseDouble(q[0]);
                             double eLon = Double.parseDouble(q[1]);
@@ -415,7 +471,7 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
 
             }
 
-            for (int i = 0; i < edgeList.size(); i++)
+           /* for (int i = 0; i < edgeList.size(); i++)
             {
                 Edge e = edgeList.get(i);
                 List<LatLng> edge = e.getEdges();
@@ -423,7 +479,7 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
                     Log.d("Edge ", + i + " " + lat);
                 }
 
-            }
+            }*/
 
             addLines(mList, edgeList);
 
@@ -676,33 +732,5 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
         locationManager.removeUpdates(this);
     }
 
-    /*List<LatLng> eList = new ArrayList<LatLng>();
-            if(tokens4.length > 1) {
 
-                String eLatLngs = tokens4[1];
-                String[] tokens5 = eLatLngs.split(delims3);
-                //LOOP FOR TESTING PURPOSES
-                for (int i = 0; i < tokens5.length; i++) {
-                    Log.d("Edges2 " + i, tokens5[i]);
-                }
-
-                String d = "[(())]+";
-
-                for (String str : tokens5) {
-                    String[] p = str.split(d);
-                    for (String str2 : p) {
-                        if (!str2.isEmpty()) {
-                            String[] q = str2.split(delimcom);
-                            double eLat = Double.parseDouble(q[0]);
-                            double eLon = Double.parseDouble(q[1]);
-                            LatLng eLatLng = new LatLng(eLat, eLon);
-                            eList.add(eLatLng);
-
-
-                        }
-
-                    }
-
-                }
-            }*/
 }

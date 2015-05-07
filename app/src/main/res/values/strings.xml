@@ -9,12 +9,13 @@
 
     <string-array name="find_array">
         <item>Food</item>
-        <item>Public Access Buildings N/A</item>
-        <item>Bathrooms(none)</item>
+        <item>Vending Machines</item>
+        <item>Keyless Lock Hotspot</item>
         <item>Computer Clusters</item>
         <item>Printers</item>
         <item>Scanners</item>
         <item>Libraries</item>
+        <item>Laundry Rooms</item>
     </string-array>
 
 </resources>

@@ -30,7 +30,7 @@ android:layout_below="@+id/spinner"
 android:layout_centerHorizontal="true"
 android:textSize="32dp" />
 
-<EditText
+<!-- <EditText
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
 android:id="@+id/neardest"
@@ -38,7 +38,19 @@ android:layout_below="@+id/textView5"
 android:layout_alignParentRight="true"
 android:layout_alignParentEnd="true"
 android:layout_alignParentLeft="true"
-android:layout_alignParentStart="true" />
+android:layout_alignParentStart="true" /> -->
+
+    <AutoCompleteTextView
+        android:id="@+id/neardest"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="fill_horizontal"
+        android:hint="Current location"
+        android:completionThreshold="3"
+        android:layout_below="@+id/textView5"
+        android:imeOptions="actionNext"
+        android:padding="10dp"
+        android:singleLine="true" />
 
 <Button
 android:layout_width="wrap_content"

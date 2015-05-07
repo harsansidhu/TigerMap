@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -21,6 +22,8 @@ public class FindActivity extends ActionBarActivity implements AdapterView.OnIte
     private String value;
     private Boolean find = true;
     private int position;
+    private AutoCompleteTextView findText;
+    private ArrayAdapter<String> autoadapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,15 @@ public class FindActivity extends ActionBarActivity implements AdapterView.OnIte
 
         spinner.setOnItemSelectedListener(this);
 
+        //Autocomplete Adapter
+        String[] completion = getResources().getStringArray(R.array.autocompletearray);
+        autoadapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,completion);
+
+        findText = (AutoCompleteTextView) findViewById(R.id.neardest);
+        findText.setAdapter(autoadapter);
+        findText.setThreshold(3);
+
+
         Log.d("Find ID ", String.valueOf(spinner.getSelectedItemId()));
     }
 
@@ -49,8 +61,9 @@ public class FindActivity extends ActionBarActivity implements AdapterView.OnIte
       //  Toast.makeText(getApplicationContext(), "From =" + frommessage, Toast.LENGTH_SHORT).show();
 
 
-        EditText editTextnear = (EditText) findViewById(R.id.neardest);
-        String tomessage = editTextnear.getText().toString();
+      //  EditText editTextnear = (EditText) findViewById(R.id.neardest);
+      //  String tomessage = editTextnear.getText().toString();
+         String tomessage = findText.getText().toString();
 
 
 

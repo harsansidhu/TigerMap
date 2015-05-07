@@ -24,6 +24,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:textSize="32dp" />
+
             <TextView android:text="From" android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView2"
@@ -32,13 +33,26 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 
-            <EditText
+            <AutoCompleteTextView
+                android:id="@+id/fromdest"
+                android:hint="Current location"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:completionThreshold="3"
+                android:imeOptions="actionNext"
+                android:padding="10dp"
+                android:layout_below="@+id/textView2"
+                android:selectAllOnFocus="true"
+                android:singleLine="true" />
+
+         <!--   <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/fromdest"
                 android:layout_below="@+id/textView2"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true" /> -->
 
             <TextView
                 android:layout_width="wrap_content"
@@ -51,46 +65,115 @@
                 android:layout_alignParentStart="true"
                 android:textSize="24dp" />
 
-            <EditText
+         <!--   <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/todest"
                 android:layout_below="@+id/textView4"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true" /> -->
 
-            <EditText
+            <AutoCompleteTextView
+                android:id="@+id/todest"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:completionThreshold="2"
+                android:imeOptions="actionNext"
+                android:padding="10dp"
+                android:layout_below="@+id/textView4"
+                android:selectAllOnFocus="true"
+                android:singleLine="true" />
+
+          <!--  <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/addedEdit1"
                 android:layout_gravity="center_horizontal"
-                android:visibility="gone" />
+                android:visibility="gone" /> -->
 
-            <EditText
+            <AutoCompleteTextView
+                android:id="@+id/addedEdit1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:completionThreshold="2"
+                android:imeOptions="actionNext"
+                android:padding="10dp"
+                android:visibility="gone"
+                android:singleLine="true" />
+
+          <!--  <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/addedEdit2"
-                android:visibility="gone" />
+                android:visibility="gone" /> -->
 
-            <EditText
+            <AutoCompleteTextView
+                android:id="@+id/addedEdit2"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:completionThreshold="2"
+                android:imeOptions="actionNext"
+                android:padding="10dp"
+                android:visibility="gone"
+                android:singleLine="true" />
+
+          <!--  <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/addedEdit3"
                 android:layout_gravity="center_horizontal"
-                android:visibility="gone" />
+                android:visibility="gone" /> -->
 
-            <EditText
+            <AutoCompleteTextView
+                android:id="@+id/addedEdit3"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:completionThreshold="2"
+                android:imeOptions="actionNext"
+                android:padding="10dp"
+                android:visibility="gone"
+                android:singleLine="true" />
+
+
+
+          <!--  <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/addedEdit4"
                 android:layout_gravity="center_horizontal"
-                android:visibility="gone" />
+                android:visibility="gone" /> -->
 
-            <EditText
+            <AutoCompleteTextView
+                android:id="@+id/addedEdit4"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:completionThreshold="2"
+                android:imeOptions="actionNext"
+                android:padding="10dp"
+                android:visibility="gone"
+                android:singleLine="true" />
+
+         <!--   <EditText
                 android:layout_width="363dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/addedEdit5"
-                android:visibility="gone" />
+                android:visibility="gone" /> -->
+
+            <AutoCompleteTextView
+                android:id="@+id/addedEdit5"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="fill_horizontal"
+                android:completionThreshold="2"
+                android:imeOptions="actionNext"
+                android:padding="10dp"
+                android:visibility="gone"
+                android:singleLine="true" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -99,7 +182,6 @@
                 android:id="@+id/getdirec"
                 android:layout_below="@+id/todest"
                 android:layout_centerHorizontal="true"
-                android:onClick="direcsend"
                 android:enabled="true" />
 
             <Button

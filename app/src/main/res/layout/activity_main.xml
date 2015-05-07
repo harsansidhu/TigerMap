@@ -17,8 +17,6 @@
         android:text="Directions"
         android:id="@+id/Direcbutton"
         android:layout_below="@+id/textView"
-        android:layout_alignLeft="@+id/button3"
-        android:layout_alignStart="@+id/button3"
         android:layout_centerHorizontal="true"
         android:onClick="direcpage" />
 
@@ -28,24 +26,22 @@
         android:layout_height="wrap_content"
         android:text="Find"
         android:layout_below="@+id/Direcbutton"
-        android:layout_alignLeft="@+id/button3"
-        android:layout_alignStart="@+id/button3"
         android:layout_centerHorizontal="true"/>
-    <!--
-       Button
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           android:text="New Button"
-           android:id="@+id/button3"
-           android:layout_below="@+id/button2"
-           android:layout_centerHorizontal="true"
 
-       Button
+       <Button
+           android:id="@+id/Settings"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
-           android:text="New Button"
-           android:id="@+id/button4"
-           android:layout_below="@+id/button3"
-           android:layout_centerHorizontal="true"  -->
+           android:layout_below="@+id/Find"
+           android:text="Settings"
+           android:layout_centerHorizontal="true"/>
+
+    <!--   Button
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="New Button"
+          android:id="@+id/button4"
+          android:layout_below="@+id/button3"
+          android:layout_centerHorizontal="true"  -->
 
 </RelativeLayout>

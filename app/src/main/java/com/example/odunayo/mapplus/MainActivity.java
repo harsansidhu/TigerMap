@@ -23,6 +23,7 @@ public class MainActivity extends ActionBarActivity {
 
         Button direction = (Button) findViewById(R.id.Direcbutton);
         Button find = (Button) findViewById(R.id.Find);
+        Button settings = (Button) findViewById(R.id.Settings);
       //  Button dummy2 = (Button) findViewById(R.id.button3);
        // Button dummy3 = (Button) findViewById(R.id.button4);
 
@@ -47,6 +48,17 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplication(), SettingsActivity.class);
+                //EditText editText = (EditText) findViewById(R.id.edit_message);
+                startActivity(intent);
+            }
+        });
+
+
     }
     /*click directions button to go to the page
     public void direcpage(View view) {

@@ -74,6 +74,10 @@
             android:name=".FindActivity"
             android:label="Find" >
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings" >
+        </activity>
     </application>
 
 </manifest>
