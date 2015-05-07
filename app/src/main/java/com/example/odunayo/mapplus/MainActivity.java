@@ -23,7 +23,7 @@ public class MainActivity extends ActionBarActivity {
 
         Button direction = (Button) findViewById(R.id.Direcbutton);
         Button find = (Button) findViewById(R.id.Find);
-        Button settings = (Button) findViewById(R.id.Settings);
+        Button settings = (Button) findViewById(R.id.button);
       //  Button dummy2 = (Button) findViewById(R.id.button3);
        // Button dummy3 = (Button) findViewById(R.id.button4);
 

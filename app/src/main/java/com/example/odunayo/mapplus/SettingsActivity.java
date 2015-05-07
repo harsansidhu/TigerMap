@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.CompoundButton;
@@ -32,12 +33,14 @@ public class SettingsActivity extends ActionBarActivity {
         boolean printers = settings.getBoolean("printersMode", false);
         boolean dining = settings.getBoolean("diningMode", false);
 
-        String finloc = settings.getString("findlocMode", "");
-        String wspeed = settings.getString("walkspeedMode", "");
+        String finloc = settings.getString("findlocMode", "30");
+        String wspeed = settings.getString("walkspeedMode", "3");
+       // Float wspeed = settings.getFloat("walkspeedMode", 30);
+       // Integer finloc = settings.getInt("findlocMode", 3);
 
         Switch wheelchair = (Switch) findViewById(R.id.wheel);
         Switch grasspath = (Switch) findViewById(R.id.grass);
-        Switch bususe = (Switch) findViewById(R.id.buses);
+        //Switch bususe = (Switch) findViewById(R.id.buses);
         Switch onlineprint = (Switch) findViewById(R.id.printer);
         Switch opendine = (Switch) findViewById(R.id.dining);
 
@@ -46,11 +49,12 @@ public class SettingsActivity extends ActionBarActivity {
 
         wheelchair.setChecked(wheel);
         grasspath.setChecked(grass);
-        bususe.setChecked(buses);
+       // bususe.setChecked(buses);
         onlineprint.setChecked(printers);
         opendine.setChecked(dining);
         findlocations.setText(finloc, TextView.BufferType.EDITABLE);
-        walks.setText(wspeed, TextView.BufferType.EDITABLE);
+       // walks.setText(wspeed, TextView.BufferType.EDITABLE);
+        walks.setText(String.valueOf(wspeed));
 
         wheelchair.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -60,7 +64,7 @@ public class SettingsActivity extends ActionBarActivity {
                 editor.putBoolean("wheelMode", isChecked);
                 editor.commit();
 
-                Toast.makeText(getApplicationContext(), "Wheels", Toast.LENGTH_LONG).show();
+              //  Toast.makeText(getApplicationContext(), "Wheels", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -74,7 +78,7 @@ public class SettingsActivity extends ActionBarActivity {
             }
         });
 
-        bususe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+     /*   bususe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 //settings = getSharedPreferences(PREFS_NAME, 0);
@@ -82,7 +86,7 @@ public class SettingsActivity extends ActionBarActivity {
                 editor.putBoolean("busMode", isChecked);
                 editor.commit();
             }
-        });
+        });*/
 
         onlineprint.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -143,6 +147,9 @@ public class SettingsActivity extends ActionBarActivity {
 
             }
         });
+
+
+
     }
 
 

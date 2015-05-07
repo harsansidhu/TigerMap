@@ -41,13 +41,13 @@
         android:textSize="20dp"
         android:layout_gravity="center_horizontal|top" />
 
-    <Switch
+   <!-- <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Use TigerTransit Buses"
         android:id="@+id/buses"
         android:layout_gravity="center_horizontal|top"
-        android:textSize="20dp" />
+        android:textSize="20dp" /> -->
 
     <EditText
         android:layout_width="wrap_content"

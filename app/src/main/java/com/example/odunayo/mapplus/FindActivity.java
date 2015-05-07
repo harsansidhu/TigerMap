@@ -91,6 +91,7 @@ public class FindActivity extends ActionBarActivity implements AdapterView.OnIte
         }
 
         String formatted = "find;" + position + ";" + tomessage + ";settings;0;1;0;2.5;3;1;0";
+     //   String formatted = "find;" + position + ";" + tomessage + ";settings;0;1;0;2.5;3;1;0";
         intent.putExtra(EXTRA_MESSAGE_TO, tomessage);
         intent.putExtra("findTrue", find);
         intent.putExtra("find", formatted);

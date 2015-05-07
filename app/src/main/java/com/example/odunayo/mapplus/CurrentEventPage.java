@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
@@ -60,6 +61,8 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
     private static final JsonFactory JSON_FACTORY = new JacksonFactory();
     private List<LatLng> latLngs = new ArrayList<LatLng>();
     private List<String> LatLngsStrings = new ArrayList<String>();
+    private SharedPreferences settings;
+    public static final String PREFS_NAME = "MyPrefsFile";
     private String start;
     private String dest;
 
@@ -243,6 +246,44 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
             }
         });
 
+        settings = getSharedPreferences(PREFS_NAME, 0);
+        boolean wheels = settings.getBoolean("wheelMode", false);
+        boolean printers = settings.getBoolean("printersMode", false);
+        boolean dining = settings.getBoolean("diningMode", false);
+        boolean grass = settings.getBoolean("grassMode", false);
+        String finloc = settings.getString("findlocMode", "30");
+        String wspeed = settings.getString("walkspeedMode", "3");
+
+        String sWheels = "0";
+        String sPrinters = "0";
+        String sDining = "0";
+        String sGrass = "0";
+        if (wheels)
+            sWheels = "1";
+        if (printers)
+            sPrinters = "1";
+        if (dining)
+            sDining = "1";
+        if (grass)
+            sGrass = "1";
+        if (finloc.isEmpty())
+            finloc = "0";
+        if (wspeed.isEmpty())
+            wspeed = "0";
+
+        Log.d("Wheels changed", "Boolean " + wheels);
+        Log.d("printers changed", "Boolean " + printers);
+        Log.d("dining changed", "Boolean " + dining);
+        Log.d("Wheels changed", "String " + sWheels);
+        Log.d("printers changed", "String " + sPrinters);
+        Log.d("dining changed", "String " + sDining);
+        Log.d("grass changed", "Boolean " + grass);
+        Log.d("grass changed", "String " + sGrass);
+
+        Log.d("finloc", "String " + finloc);
+        Log.d("wspeed", "String " + wspeed);
+
+
 
 
         // initialize locationManager
@@ -289,7 +330,11 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
 
             start = origin;
             dest = destination;
-            send = "dir;" + origin + ";" + destination + ";settings;0;1;0;2.5;3;1;0";
+           // send = "dir;" + origin + ";" + destination + ";settings;0;1;0;2.5;3;1;0";
+          //  send = "dir;" + origin + ";" + destination + ";settings;sWheels;sGrass;0;wspeed;finloc;sPrinters;sDining";
+            send = "dir;" + origin + ";" + destination + ";settings;" +
+                    sWheels +";" + sGrass + ";0;" + wspeed + ";" + finloc +
+                    ";" + sPrinters + ";" + sDining + ";";
         }
 
         else {
@@ -308,6 +353,9 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
             e.printStackTrace();
         }
 
+
+
+        Log.d("RESPONSE FROM SERVER", response);
         CharSequence g = "Error";
        // Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
         if (response.contains(g))
