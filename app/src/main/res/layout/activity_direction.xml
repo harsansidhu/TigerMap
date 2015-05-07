@@ -91,39 +91,47 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/addedEdit5"
                 android:visibility="gone" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:id="@+id/removeEditBut"
+                    android:layout_alignTop="@+id/addEditBut"
+                    android:layout_alignRight="@+id/textView3"
+                    android:layout_alignEnd="@+id/textView3"
+                    android:onClick="removeEdit"
+                    android:clickable="false" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+"
+                    android:id="@+id/addEditBut"
+                    android:onClick="addEdit"
+                    android:layout_below="@+id/getdirec"
+                    android:layout_toLeftOf="@+id/removeEditBut"
+                    android:layout_toStartOf="@+id/removeEditBut"
+                    android:clickable="false"
+                    android:enabled="true" />
+
+
+            </LinearLayout>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Directions"
+                android:text="Get Directions"
                 android:id="@+id/getdirec"
                 android:layout_below="@+id/todest"
                 android:layout_centerHorizontal="true"
                 android:onClick="direcsend"
-                android:enabled="true" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="+"
-                android:id="@+id/addEditBut"
-                android:onClick="addEdit"
-                android:layout_below="@+id/getdirec"
-                android:layout_toLeftOf="@+id/removeEditBut"
-                android:layout_toStartOf="@+id/removeEditBut"
-                android:clickable="false"
-                android:enabled="true" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="-"
-                android:id="@+id/removeEditBut"
-                android:layout_alignTop="@+id/addEditBut"
-                android:layout_alignRight="@+id/textView3"
-                android:layout_alignEnd="@+id/textView3"
-                android:onClick="removeEdit"
-                android:clickable="false" />
+                android:enabled="true"
+                android:layout_gravity="center_horizontal" />
         </LinearLayout>
     </ScrollView>
 
