@@ -1,6 +1,7 @@
 package com.example.odunayo.mapplus;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,8 @@ public class FindActivity extends ActionBarActivity implements AdapterView.OnIte
     private int position;
     private AutoCompleteTextView findText;
     private ArrayAdapter<String> autoadapter;
+    private SharedPreferences settings;
+    public static final String PREFS_NAME = "MyPrefsFile";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,8 @@ public class FindActivity extends ActionBarActivity implements AdapterView.OnIte
         findText.setThreshold(3);
 
 
+
+
         Log.d("Find ID ", String.valueOf(spinner.getSelectedItemId()));
     }
 
@@ -57,6 +62,43 @@ public class FindActivity extends ActionBarActivity implements AdapterView.OnIte
         Intent intent = new Intent(this, CurrentEventPage.class);
         String frommessage = value;
         intent.putExtra(EXTRA_MESSAGE_FROM, frommessage);
+
+        settings = getSharedPreferences(PREFS_NAME, 0);
+        boolean wheels = settings.getBoolean("wheelMode", false);
+        boolean printers = settings.getBoolean("printersMode", false);
+        boolean dining = settings.getBoolean("diningMode", false);
+        boolean grass = settings.getBoolean("grassMode", false);
+        String finloc = settings.getString("findlocMode", "30");
+        String wspeed = settings.getString("walkspeedMode", "3");
+
+        String sWheels = "0";
+        String sPrinters = "0";
+        String sDining = "0";
+        String sGrass = "0";
+        if (wheels)
+            sWheels = "1";
+        if (printers)
+            sPrinters = "1";
+        if (dining)
+            sDining = "1";
+        if (grass)
+            sGrass = "1";
+        if (finloc.isEmpty())
+            finloc = "0";
+        if (wspeed.isEmpty())
+            wspeed = "0";
+
+        Log.d("Wheels changed", "Boolean " + wheels);
+        Log.d("printers changed", "Boolean " + printers);
+        Log.d("dining changed", "Boolean " + dining);
+        Log.d("Wheels changed", "String " + sWheels);
+        Log.d("printers changed", "String " + sPrinters);
+        Log.d("dining changed", "String " + sDining);
+        Log.d("grass changed", "Boolean " + grass);
+        Log.d("grass changed", "String " + sGrass);
+
+        Log.d("finloc", "String " + finloc);
+        Log.d("wspeed", "String " + wspeed);
 
       //  Toast.makeText(getApplicationContext(), "From =" + frommessage, Toast.LENGTH_SHORT).show();
 
@@ -66,14 +108,19 @@ public class FindActivity extends ActionBarActivity implements AdapterView.OnIte
          String tomessage = findText.getText().toString();
 
 
-
-
+        //GPS Code Adapted From:
         // http://www.androidhive.info/2012/07/android-gps-location-manager-tutorial/
+        //Last Access 5/1/15
         GPSTracker gps = new GPSTracker(FindActivity.this);
 
         // check if GPS enabled
         if(gps.canGetLocation()) {
-            if (tomessage.equalsIgnoreCase("")) {
+            if (tomessage.equalsIgnoreCase("") || tomessage.equalsIgnoreCase("my location") || tomessage.equalsIgnoreCase("current location")) {
+                if(tomessage.contains(";"))
+                {
+                    Toast.makeText(getApplicationContext(), "You Cannot have SemiColons in your directions", Toast.LENGTH_LONG).show();
+                    finish();
+                }
 
                 double latitude = gps.getLatitude();
                 double longitude = gps.getLongitude();
@@ -90,8 +137,11 @@ public class FindActivity extends ActionBarActivity implements AdapterView.OnIte
             gps.showSettingsAlert();
         }
 
-        String formatted = "find;" + position + ";" + tomessage + ";settings;0;1;0;2.5;3;1;0";
-     //   String formatted = "find;" + position + ";" + tomessage + ";settings;0;1;0;2.5;3;1;0";
+      //  String formatted = "find;" + position + ";" + tomessage + ";settings;0;1;0;2.5;3;1;0";
+        String formatted = "find;" + position + ";" + tomessage + ";settings;" +
+                sWheels +";" + sGrass + ";0;" + wspeed + ";" + finloc +
+                ";" + sPrinters + ";" + sDining;
+
         intent.putExtra(EXTRA_MESSAGE_TO, tomessage);
         intent.putExtra("findTrue", find);
         intent.putExtra("find", formatted);

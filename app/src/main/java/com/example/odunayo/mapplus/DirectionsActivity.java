@@ -115,6 +115,11 @@ public class DirectionsActivity extends ActionBarActivity {
                 tomessage = editTextto.getText().toString().replace(";","");
                 for(int i = 0; i < added.length; i++) {
                     if (added[i].getVisibility() == View.VISIBLE) {
+                        if(tomessage.contains(";"))
+                        {
+                            Toast.makeText(getApplicationContext(), "You Cannot have SemiColons in your directions", Toast.LENGTH_LONG).show();
+                            finish();
+                        }
                         tomessage = tomessage.concat(";" + added[i].getText().toString().replace(";", ""));
                         tomessage = tomessage.concat(";" + added[i].getText().toString().replace(";", ""));
                         mult = true;
@@ -127,7 +132,7 @@ public class DirectionsActivity extends ActionBarActivity {
 
                 // check if GPS enabled
                 if(gps.canGetLocation()) {
-                    if (frommessage.equalsIgnoreCase("") || frommessage.equalsIgnoreCase("my location") || frommessage.equalsIgnoreCase("BasedGod")) {
+                    if (frommessage.equalsIgnoreCase("") || frommessage.equalsIgnoreCase("my location") || frommessage.equalsIgnoreCase("BasedGod") ||frommessage.equalsIgnoreCase("current location") ) {
 
                         double latitude = gps.getLatitude();
                         double longitude = gps.getLongitude();

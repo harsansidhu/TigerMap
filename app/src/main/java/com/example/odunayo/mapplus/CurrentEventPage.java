@@ -185,15 +185,9 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
 
                 String html = "(?<=[.])(?=[<])";
 
-                //    for(int j = 0; j < descrip3.length; j++) {
-                //       Log.d("Html " + j, descrip3[j]);
-                //   }
-
-                //descrip3[1] = html string
-                //   Spanned spannedContent = Html.fromHtml(descrip3[1]);
-
 
                 final String snippet = marker.getSnippet();
+                Log.d("Snippet ",snippet);
                 String[] splitDescrip = snippet.split(html);
 
                 if(splitDescrip.length > 1)
@@ -324,8 +318,13 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
 
         String send = "";
         if (!find) {
-            if (origin == "" || origin == "my location" || origin == "here" || origin == "BasedGod")
+            if (origin == "" || origin.equalsIgnoreCase("my location") || origin == "here" || origin == "BasedGod" || origin.equalsIgnoreCase("Current location"))
                 origin = myLocation;
+            else if (origin.contains(";"))
+            {
+                Toast.makeText(this, "You Cannot have SemiColons in your directions", Toast.LENGTH_SHORT).show();
+                finish();
+            }
 
 
             start = origin;
@@ -334,7 +333,7 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
           //  send = "dir;" + origin + ";" + destination + ";settings;sWheels;sGrass;0;wspeed;finloc;sPrinters;sDining";
             send = "dir;" + origin + ";" + destination + ";settings;" +
                     sWheels +";" + sGrass + ";0;" + wspeed + ";" + finloc +
-                    ";" + sPrinters + ";" + sDining + ";";
+                    ";" + sPrinters + ";" + sDining;
         }
 
         else {

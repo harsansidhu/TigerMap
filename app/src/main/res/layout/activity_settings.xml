@@ -49,14 +49,30 @@
         android:layout_gravity="center_horizontal|top"
         android:textSize="20dp" /> -->
 
-    <EditText
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:id="@+id/walkspeed"
         android:layout_gravity="center_horizontal|top"
-        android:hint="Walk Speed" />
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Walk Speed(Minutes/Mile):"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal|top"
+            android:textSize="20dp" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/walkspeed"
+            android:layout_gravity="center_horizontal|top"
+            android:hint="" />
+        </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -67,13 +83,28 @@
         android:textSize="30dp"
         android:layout_gravity="center_horizontal|top" />
 
-    <EditText
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/findloc"
-        android:hint="Number of Locations to Find" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="# of Locations to Find:"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="20dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/findloc"
+            android:hint="" />
+
+        </LinearLayout>
 
     <Switch
         android:layout_width="wrap_content"
@@ -90,6 +121,15 @@
         android:id="@+id/dining"
         android:layout_gravity="center_horizontal|top"
         android:textSize="20dp" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:layout_centerHorizontal="true"
+        android:enabled="true"
+        android:layout_gravity="center_horizontal|top" />
 
 </LinearLayout>
     </RelativeLayout>

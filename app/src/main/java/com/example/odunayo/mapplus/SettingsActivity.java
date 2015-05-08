@@ -9,6 +9,8 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -43,6 +45,8 @@ public class SettingsActivity extends ActionBarActivity {
         //Switch bususe = (Switch) findViewById(R.id.buses);
         Switch onlineprint = (Switch) findViewById(R.id.printer);
         Switch opendine = (Switch) findViewById(R.id.dining);
+
+        Button submit = (Button) findViewById(R.id.submit);
 
         EditText findlocations = (EditText) findViewById(R.id.findloc);
         EditText walks = (EditText) findViewById(R.id.walkspeed);
@@ -149,7 +153,27 @@ public class SettingsActivity extends ActionBarActivity {
         });
 
 
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String loc = settings.getString("findlocMode", "3");
+                String speed = settings.getString("walkspeedMode", "30");
+                if (loc.isEmpty() || loc.matches("0"))
+                    Toast.makeText(getApplication(), "# of locations must be greater than 0", Toast.LENGTH_SHORT).show();
+                else if (speed.isEmpty() || speed.matches("0"))
+                    Toast.makeText(getApplication(), "speed must be greater than 0", Toast.LENGTH_SHORT).show();
+                else
+                finish();
 
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        //Disables when back button is Pressed
     }
 
 
