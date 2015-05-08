@@ -116,11 +116,11 @@ public class FindActivity extends ActionBarActivity implements AdapterView.OnIte
         // check if GPS enabled
         if(gps.canGetLocation()) {
             if (tomessage.equalsIgnoreCase("") || tomessage.equalsIgnoreCase("my location") || tomessage.equalsIgnoreCase("current location")) {
-                if(tomessage.contains(";"))
+              /*  if(tomessage.contains(";"))
                 {
                     Toast.makeText(getApplicationContext(), "You Cannot have SemiColons in your directions", Toast.LENGTH_LONG).show();
                     finish();
-                }
+                }*/
 
                 double latitude = gps.getLatitude();
                 double longitude = gps.getLongitude();

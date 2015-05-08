@@ -320,11 +320,11 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
         if (!find) {
             if (origin == "" || origin.equalsIgnoreCase("my location") || origin == "here" || origin == "BasedGod" || origin.equalsIgnoreCase("Current location"))
                 origin = myLocation;
-            else if (origin.contains(";"))
+           /* else if (origin.contains(";"))
             {
                 Toast.makeText(this, "You Cannot have SemiColons in your directions", Toast.LENGTH_SHORT).show();
                 finish();
-            }
+            }*/
 
 
             start = origin;

@@ -115,11 +115,11 @@ public class DirectionsActivity extends ActionBarActivity {
                 tomessage = editTextto.getText().toString().replace(";","");
                 for(int i = 0; i < added.length; i++) {
                     if (added[i].getVisibility() == View.VISIBLE) {
-                        if(tomessage.contains(";"))
+                  /*      if(tomessage.contains(";"))
                         {
                             Toast.makeText(getApplicationContext(), "You Cannot have SemiColons in your directions", Toast.LENGTH_LONG).show();
                             finish();
-                        }
+                        }*/
                         tomessage = tomessage.concat(";" + added[i].getText().toString().replace(";", ""));
                         tomessage = tomessage.concat(";" + added[i].getText().toString().replace(";", ""));
                         mult = true;
