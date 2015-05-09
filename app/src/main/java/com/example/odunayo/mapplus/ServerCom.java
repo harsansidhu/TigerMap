@@ -1,12 +1,15 @@
 package com.example.odunayo.mapplus;
 
 /**
- * Created by Odunayo on 4/16/2015.
+ * Created by Harsan on 4/16/2015.
+ * This class facilitates communication with the backend
+ * It sends the user input to the server
+ * It returns the string containing either the shortest path or
+ * all of the closest nodes for the Find feature
  */
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -17,6 +20,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +114,6 @@ public class ServerCom  {
                 responseString  = httpclient.execute(httppost, responseHandler);
 
                 Log.d("RESPONSE", responseString);
-             //   setResponse(responseString);
 
             } catch (ClientProtocolException e) {
                 Log.d("CLIENTEXCEPTION", "client exception");
@@ -124,17 +127,11 @@ public class ServerCom  {
         // Set the sendToServer string to the adequate response
         protected void onPostExecute(String result) {
             serverResponse = responseString;
-         //   setResponse(serverResponse);
 
         }
-
-
     }
 
     // Empty constructor
     public ServerCom() {
     }
-
-
-
 }
