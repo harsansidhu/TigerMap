@@ -29,22 +29,16 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_maps_public_key" />
 
         <activity
             android:name=".MapsActivity"
             android:label="TigerMap" >
 
-            <!--
-            <intent-filter !>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter!
-            -->
         </activity>
         <activity
             android:name=".Splash"
-            android:label="TigerMaps" >
+            android:label="TigerMap" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,7 +47,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:label="TigerMaps" >
+            android:label="TigerMap" >
         </activity>
         <activity
             android:name=".SelectFriends"
