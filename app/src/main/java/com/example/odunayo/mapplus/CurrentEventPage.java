@@ -29,6 +29,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -186,22 +187,47 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
                 String html = "(?<=[.])(?=[<])";
 
 
+
+
                 final String snippet = marker.getSnippet();
                 Log.d("Snippet ",snippet);
-                String[] splitDescrip = snippet.split(html);
 
-                if(splitDescrip.length > 1)
+                //Check for first "<" and split there
+                char[] charArray = snippet.toCharArray();
+                int cIndex = 0;
+                for(int i = 0; i < charArray.length; i++){
+                    char c = charArray[i];
+                    if (c == '<'){
+                        cIndex = i;
+                        break;
+                    }
+
+
+                }
+                Log.d("c Index ", "Index " + cIndex);
+                String sub = snippet.substring(cIndex);
+                String snip = "";
+                if (cIndex > 0)
+                    snip = snippet.substring(0,cIndex-1);
+                Log.d("startString ", snip);
+                Log.d("subString ", sub);
+
+
+
+              String[] splitDescrip = snippet.split(html);
+
+           /*     if(splitDescrip.length > 1)
                 {
                     Log.d("SplitDescrip ",splitDescrip[0]);
                     Log.d("SplitDescrip2 ",splitDescrip[1]);
 
-                }
+                }*/
 
 
                 final TextView snippetUi = ((TextView) v
                         .findViewById(R.id.snippet));
                 if (snippet != null) {
-                    snippetUi.setText(splitDescrip[0]);
+                    snippetUi.setText(snip); //formerly splitDescrip[0]
                 } else {
                     snippetUi.setText("You Are Here");
 
@@ -209,25 +235,14 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
 
                 final TextView htmlUi = ((TextView) v
                         .findViewById(R.id.html));
-                if (splitDescrip.length > 1) {
-                    Spanned spannedContent = Html.fromHtml(splitDescrip[1]);
+                if (!sub.isEmpty()) {
+                    Spanned spannedContent = Html.fromHtml(sub);
                     htmlUi.setText(spannedContent, TextView.BufferType.SPANNABLE);
 
                 } else {
                     htmlUi.setText("");
                 }
 
-
-
-           /*     final Spanned html = marker.getSpanned();
-                final TextView htmlUi = ((TextView) v
-                        .findViewById(R.id.html));
-                if (snippet != null) {
-                    snippetUi.setText(snippet);
-                    textView.setText(spannedContent, BufferType.SPANNABLE);
-                } else {
-                    snippetUi.setText("");
-                }*/
                 return v;
             }
 
@@ -532,6 +547,8 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
 
          }
 
+        onLocationChanged(location);
+
     }
 
     /**
@@ -549,22 +566,31 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
         float color = BitmapDescriptorFactory.HUE_RED;
         for (Marker m : mLatLngs) {
 
-            switch(i){
-                case 1: color = BitmapDescriptorFactory.HUE_BLUE;
+            switch(i%6){
+                case 0: color = BitmapDescriptorFactory.HUE_CYAN;
                     break;
-                case 2: color = BitmapDescriptorFactory.HUE_CYAN;
+                case 1: color = BitmapDescriptorFactory.HUE_ROSE;
                     break;
-                case 3: color = BitmapDescriptorFactory.HUE_ROSE;
+                case 2: color = BitmapDescriptorFactory.HUE_YELLOW;
                     break;
-                case 4: color = BitmapDescriptorFactory.HUE_YELLOW;
+                case 3: color = BitmapDescriptorFactory.HUE_MAGENTA;
                     break;
-                case 5: color = BitmapDescriptorFactory.HUE_MAGENTA;
-                    break;
-                case 6: color = BitmapDescriptorFactory.HUE_GREEN;
+                case 4: color = BitmapDescriptorFactory.HUE_GREEN;
+                        break;
+                case 5: color = BitmapDescriptorFactory.HUE_AZURE;
                     break;
 
             }
 
+            if (i == 0) {
+
+                mMap.addMarker(new MarkerOptions()
+                        .title(m.getName())
+                        .snippet(m.getDescription())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                        .position(m.getLatLng()));
+            }
+            else
             mMap.addMarker(new MarkerOptions()
                     .title(m.getName())
                     .snippet(m.getDescription())
@@ -749,13 +775,15 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
     @Override
     public void onLocationChanged(Location location) {
 
+
+
         GPSTracker gps = new GPSTracker(this);
 
-        // Getting latitude of the current location
-        double latitude = location.getLatitude();
+        // Getting latitude of the current location, but set to princeton coordinates
+        double latitude = 40.3487;
 
         // Getting longitude of the current location
-        double longitude = location.getLongitude();
+        double longitude = -74.6593;
 
         if(gps.canGetLocation()) {
 
@@ -764,9 +792,9 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
             Log.d("Changed loc", "Changed loc");
         }
 
-
         // Creating a LatLng object for the current location
         LatLng latLng = new LatLng(latitude, longitude);
+
 
         // Showing the current location in Google Map
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));

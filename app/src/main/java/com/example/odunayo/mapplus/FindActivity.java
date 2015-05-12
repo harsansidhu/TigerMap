@@ -105,7 +105,7 @@ public class FindActivity extends ActionBarActivity implements AdapterView.OnIte
 
       //  EditText editTextnear = (EditText) findViewById(R.id.neardest);
       //  String tomessage = editTextnear.getText().toString();
-         String tomessage = findText.getText().toString();
+         String tomessage = findText.getText().toString().replace(";","");
 
 
         //GPS Code Adapted From:

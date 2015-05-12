@@ -35,8 +35,8 @@ public class SettingsActivity extends ActionBarActivity {
         boolean printers = settings.getBoolean("printersMode", false);
         boolean dining = settings.getBoolean("diningMode", false);
 
-        String finloc = settings.getString("findlocMode", "30");
-        String wspeed = settings.getString("walkspeedMode", "3");
+        String finloc = settings.getString("findlocMode", "3");
+        String wspeed = settings.getString("walkspeedMode", "30");
        // Float wspeed = settings.getFloat("walkspeedMode", 30);
        // Integer finloc = settings.getInt("findlocMode", 3);
 

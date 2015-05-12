@@ -13,6 +13,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -48,6 +49,7 @@ public class DirectionsActivity extends ActionBarActivity {
 
 
         layout=(LinearLayout)findViewById(R.id.layout);
+        TextView directions = (TextView)findViewById(R.id.textView3);
 
         directions = (Button) findViewById(R.id.getdirec);
         addEditText = (Button) findViewById(R.id.addEditBut);
@@ -111,7 +113,7 @@ public class DirectionsActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(getApplication(), CurrentEventPage.class);
 
-                frommessage = editText.getText().toString();
+                frommessage = editText.getText().toString().replace(";", "");
                 tomessage = editTextto.getText().toString().replace(";","");
                 for(int i = 0; i < added.length; i++) {
                     if (added[i].getVisibility() == View.VISIBLE) {
@@ -120,7 +122,6 @@ public class DirectionsActivity extends ActionBarActivity {
                             Toast.makeText(getApplicationContext(), "You Cannot have SemiColons in your directions", Toast.LENGTH_LONG).show();
                             finish();
                         }*/
-                        tomessage = tomessage.concat(";" + added[i].getText().toString().replace(";", ""));
                         tomessage = tomessage.concat(";" + added[i].getText().toString().replace(";", ""));
                         mult = true;
 
