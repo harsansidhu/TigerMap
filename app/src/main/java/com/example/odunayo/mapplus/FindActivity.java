@@ -68,8 +68,8 @@ public class FindActivity extends ActionBarActivity implements AdapterView.OnIte
         boolean printers = settings.getBoolean("printersMode", false);
         boolean dining = settings.getBoolean("diningMode", false);
         boolean grass = settings.getBoolean("grassMode", false);
-        String finloc = settings.getString("findlocMode", "30");
-        String wspeed = settings.getString("walkspeedMode", "3");
+        String finloc = settings.getString("findlocMode", "3");
+        String wspeed = settings.getString("walkspeedMode", "30");
 
         String sWheels = "0";
         String sPrinters = "0";

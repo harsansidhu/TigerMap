@@ -260,8 +260,8 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
         boolean printers = settings.getBoolean("printersMode", false);
         boolean dining = settings.getBoolean("diningMode", false);
         boolean grass = settings.getBoolean("grassMode", false);
-        String finloc = settings.getString("findlocMode", "30");
-        String wspeed = settings.getString("walkspeedMode", "3");
+        String finloc = settings.getString("findlocMode", "3");
+        String wspeed = settings.getString("walkspeedMode", "30");
 
         String sWheels = "0";
         String sPrinters = "0";
@@ -483,8 +483,10 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
            // }
 
             String xSplit = "X";
-            tokens4[1] = tokens4[1].replace(")),", "X");
-            Log.d("Edge List Delim " , tokens4[1]);
+            if(tokens4.length > 1) {
+                tokens4[1] = tokens4[1].replace(")),", "X");
+                Log.d("Edge List Delim ", tokens4[1]);
+            }
 
 
             String d = "[(())]+";
@@ -780,17 +782,17 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
         GPSTracker gps = new GPSTracker(this);
 
         // Getting latitude of the current location, but set to princeton coordinates
-        double latitude = 40.3487;
+        double latitude = 40.344601;
 
         // Getting longitude of the current location
-        double longitude = -74.6593;
+        double longitude = -74.655595;
 
-        if(gps.canGetLocation()) {
+     /*   if(gps.canGetLocation()) {
 
                  latitude = gps.getLatitude();
                  longitude = gps.getLongitude();
             Log.d("Changed loc", "Changed loc");
-        }
+        }*/
 
         // Creating a LatLng object for the current location
         LatLng latLng = new LatLng(latitude, longitude);
@@ -800,7 +802,7 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
 
         // Zoom in the Google Map
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
         Log.d("Changed loc2", "Changed loc2");
 
         // stop
