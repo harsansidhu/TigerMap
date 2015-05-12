@@ -29,6 +29,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
+/*This does nothing, only used it to test some map stuff*/
+
 public class MapsActivity extends ActionBarActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
@@ -205,11 +207,6 @@ public class MapsActivity extends ActionBarActivity implements OnMapReadyCallbac
     {
         int id = item.getItemId();
 
-        if (id == R.id.new_event)
-        {
-            Intent intent = new Intent(this, NewEventPage.class);
-            startActivity(intent);
-        }
 
         if (id == R.id.current_event)
         {

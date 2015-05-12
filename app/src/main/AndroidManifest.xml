@@ -57,20 +57,12 @@
             android:label="TigerMaps" >
         </activity>
         <activity
-            android:name=".SelectFriends"
-            android:label="Select Friends" >
-        </activity>
-        <activity
             android:name=".DirectionsActivity"
             android:label="DirectionsActivity" >
         </activity>
         <activity
             android:name=".DisplayDirectionActivity"
             android:label="Display" >
-        </activity>
-        <activity
-            android:name=".NewEventPage"
-            android:label="New Event Page" >
         </activity>
         <activity
             android:name=".CurrentEventPage"

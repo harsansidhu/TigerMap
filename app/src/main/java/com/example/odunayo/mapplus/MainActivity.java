@@ -80,12 +80,6 @@ public class MainActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.new_event)
-        {
-            Intent intent = new Intent(this, NewEventPage.class);
-            startActivity(intent);
-        }
-
         if (id == R.id.current_event)
         {
             Intent intent = new Intent(this, CurrentEventPage.class);

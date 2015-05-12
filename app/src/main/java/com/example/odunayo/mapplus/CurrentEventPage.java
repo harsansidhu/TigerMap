@@ -187,8 +187,6 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
                 String html = "(?<=[.])(?=[<])";
 
 
-
-
                 final String snippet = marker.getSnippet();
                 Log.d("Snippet ",snippet);
 
@@ -211,17 +209,6 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
                     snip = snippet.substring(0,cIndex-1);
                 Log.d("startString ", snip);
                 Log.d("subString ", sub);
-
-
-
-              String[] splitDescrip = snippet.split(html);
-
-           /*     if(splitDescrip.length > 1)
-                {
-                    Log.d("SplitDescrip ",splitDescrip[0]);
-                    Log.d("SplitDescrip2 ",splitDescrip[1]);
-
-                }*/
 
 
                 final TextView snippetUi = ((TextView) v
@@ -255,6 +242,33 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
             }
         });
 
+
+
+
+
+
+        // initialize locationManager
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        provider = locationManager.getBestProvider(criteria, true);
+        locationManager.requestLocationUpdates(provider, 1000, 10, this);
+        location = mMap.getMyLocation();
+
+
+        // set camera to roughly the area of location
+        location = mMap.getMyLocation();
+        if (location == null) {
+            // if location is null, then load the previous known location
+            // even if inaccurate
+            location = locationManager.getLastKnownLocation(provider);
+        }
+
+       if (location != null)
+        onLocationChanged(location);
+
+        locationManager.requestLocationUpdates(provider, 1000, 10, this);
+
+        //Get shared Preferences from Settings
         settings = getSharedPreferences(PREFS_NAME, 0);
         boolean wheels = settings.getBoolean("wheelMode", false);
         boolean printers = settings.getBoolean("printersMode", false);
@@ -292,30 +306,6 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
         Log.d("finloc", "String " + finloc);
         Log.d("wspeed", "String " + wspeed);
 
-
-
-
-        // initialize locationManager
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        provider = locationManager.getBestProvider(criteria, true);
-        locationManager.requestLocationUpdates(provider, 1000, 10, this);
-        location = mMap.getMyLocation();
-
-
-        // set camera to roughly the area of location
-        location = mMap.getMyLocation();
-        if (location == null) {
-            // if location is null, then load the previous known location
-            // even if inaccurate
-            location = locationManager.getLastKnownLocation(provider);
-        }
-
-       if (location != null)
-        onLocationChanged(location);
-
-        locationManager.requestLocationUpdates(provider, 1000, 10, this);
-
         // get string origin and destination from NewEventPage
         Bundle extra = getIntent().getExtras();
         String origin = extra.getString("from");
@@ -335,24 +325,15 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
         if (!find) {
             if (origin == "" || origin.equalsIgnoreCase("my location") || origin == "here" || origin == "BasedGod" || origin.equalsIgnoreCase("Current location"))
                 origin = myLocation;
-           /* else if (origin.contains(";"))
-            {
-                Toast.makeText(this, "You Cannot have SemiColons in your directions", Toast.LENGTH_SHORT).show();
-                finish();
-            }*/
-
-
             start = origin;
             dest = destination;
-           // send = "dir;" + origin + ";" + destination + ";settings;0;1;0;2.5;3;1;0";
-          //  send = "dir;" + origin + ";" + destination + ";settings;sWheels;sGrass;0;wspeed;finloc;sPrinters;sDining";
             send = "dir;" + origin + ";" + destination + ";settings;" +
                     sWheels +";" + sGrass + ";0;" + wspeed + ";" + finloc +
                     ";" + sPrinters + ";" + sDining;
         }
 
         else {
-            Log.d("fuck", "changed send");
+            Log.d("changed: ", "changed send");
             send = findString;
 
         }
@@ -377,7 +358,8 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
 
         else{
 
-            //Parse String from server
+            //Parse String from server, absolute clusterfuck good luck.
+
 
             String delims = "[;]";
             String delims2 = "[:{}]+";
@@ -430,8 +412,10 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
 
 
                 Log.d("Descrip", descrip);
+
+                String delimisolate = "\",\"";
                 descrip = descrip.replace("]", "");
-                String[] descrip2 = descrip.split(delimcom);
+                String[] descrip2 = descrip.split(delimisolate); //formerly delimcom
 
                 String name = descrip2[0];
                 String description = "";
@@ -445,20 +429,10 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
                     Log.d("String3 " + j, descrip2[j]);
                 }
 
-                //Parse out html if it exists
-                String html = "(?<=[.])(?=[<])";
-              //  String[] descrip3 = description.split(html);
 
-            //    for(int j = 0; j < descrip3.length; j++) {
-             //       Log.d("Html " + j, descrip3[j]);
-             //   }
-
-                //descrip3[1] = html string
-             //   Spanned spannedContent = Html.fromHtml(descrip3[1]);
 
                 LatLng location = new LatLng(mLat, mLon);
                 Marker m = new Marker(name, description, location);
-               // m.setSpanned(spannedContent);
                 mList.add(m);
 
 
@@ -560,8 +534,8 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
         PolylineOptions options = new PolylineOptions();
 
         // light blue color and noticeable width
-        options.color(Color.parseColor("#DB3301"));
-        options.width(12);
+       // options.color(Color.parseColor("#DB3301"));
+       // options.width(12);
 
         //Add Markers
         int i = 0;
@@ -652,60 +626,6 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
         return super.onOptionsItemSelected(item);
     }
 
-    private class DirectionsFetcher extends AsyncTask<URL, Integer, Void> {
-        private String origin;
-        private String destination;
-
-        public DirectionsFetcher(String origin,String destination) {
-            this.origin = origin;
-            this.destination = destination;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            CurrentEventPage.this.setProgressBarIndeterminateVisibility(Boolean.TRUE);
-        }
-
-        protected Void doInBackground(URL... urls) {
-            try {
-                HttpRequestFactory requestFactory = HTTP_TRANSPORT.createRequestFactory(new HttpRequestInitializer() {
-                    @Override
-                    public void initialize(HttpRequest request) {
-                        request.setParser(new JsonObjectParser(JSON_FACTORY));
-                    }
-                });
-
-                GenericUrl url = new GenericUrl("http://maps.googleapis.com/maps/api/directions/json?");
-                url.put("origin", origin);
-                url.put("destination", destination);
-                url.put("sensor",false);
-                url.put("mode", "walking");
-
-                HttpRequest request = requestFactory.buildGetRequest(url);
-                HttpResponse httpResponse = request.execute();
-                DirectionsResult directionsResult = httpResponse.parseAs(DirectionsResult.class);
-
-                String encodedPoints = directionsResult.routes.get(0).overviewPolyLine.points;
-                latLngs = PolyUtil.decode(encodedPoints);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            return null;
-
-        }
-
-        protected void onProgressUpdate(Integer... progress) {
-        }
-
-        protected void onPostExecute(Void result) {
-            System.out.println("Adding polyline");
-            addPolylineToMap(latLngs);
-            System.out.println("Fix Zoom");
-            GoogleMapUtils.fixZoomForLatLngs(mMap, latLngs);
-            CurrentEventPage.this.setProgressBarIndeterminateVisibility(Boolean.FALSE);
-        }
-    }
 
     public static class DirectionsResult {
         @Key("routes")
@@ -726,35 +646,6 @@ public class CurrentEventPage extends FragmentActivity implements LocationListen
     /**
      * Adds a list of markers to the map.
      */
-    public void addPolylineToMap(List<LatLng> latLngs) {
-        PolylineOptions options = new PolylineOptions();
-
-        // light blue color and noticeable width
-        options.color(Color.parseColor("#DB3301"));
-        options.width(12);
-
-       // for (LatLng latLng : latLngs) {
-       //     options.add(latLng);
-       // }
-        LatLng start = new LatLng(40.348775,-74.658477);
-        LatLng dest = new LatLng(40.348245,-74.656751);
-        options.add(new LatLng(40.348775,-74.658477));
-        options.add(new LatLng(40.348630,-74.658424));
-        options.add(new LatLng(40.348758,-74.657938));
-        options.add(new LatLng(40.348298,-74.657721));
-        options.add(new LatLng(40.348265,-74.657556));
-        options.add(new LatLng(40.348327,-74.656871));
-        options.add(new LatLng(40.348245,-74.656751));
-        mMap.addMarker(new MarkerOptions()
-                .title("Start")
-                .snippet("East Pyne")
-                .position(start));
-        mMap.addMarker(new MarkerOptions()
-                .title("Destination")
-                .snippet("Mccosh")
-                .position(dest));
-        mMap.addPolyline(options);
-    }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {

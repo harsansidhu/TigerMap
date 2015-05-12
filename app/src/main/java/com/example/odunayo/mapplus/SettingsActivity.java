@@ -37,8 +37,6 @@ public class SettingsActivity extends ActionBarActivity {
 
         String finloc = settings.getString("findlocMode", "3");
         String wspeed = settings.getString("walkspeedMode", "30");
-       // Float wspeed = settings.getFloat("walkspeedMode", 30);
-       // Integer finloc = settings.getInt("findlocMode", 3);
 
         Switch wheelchair = (Switch) findViewById(R.id.wheel);
         Switch grasspath = (Switch) findViewById(R.id.grass);

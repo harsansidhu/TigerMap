@@ -54,8 +54,8 @@ public class ServerCom  {
         String s = request.execute().get();
 
 
-        if (serverResponse == null)
-            Log.d("Server Response is Null", "Null");
+    //    if (serverResponse == null)
+    //        Log.d("Server Response is Null", "Null");
 
 
 
