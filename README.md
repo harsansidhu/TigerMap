@@ -7,7 +7,7 @@ The Princeton Map Application Students Deserve
 
 For more details visit http://grantstorey.com/TigerMap/index.html
 
-This was a project built for Computer Science 333: Advanced Programming Techniques in the spring semester of the 2014-105 schoolyear.
+This project was built for Computer Science 333: Advanced Programming Techniques in the spring semester of the 2014-2015 schoolyear.
 
 # Contributers 
 Grant Storey, Odunayo Kusoro, Harsan Sidhu, Edward De Puy, James LoPresti, Peter deGroot
